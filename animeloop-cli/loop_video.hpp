@@ -20,21 +20,17 @@ namespace al {
     class LoopVideo {
     public:
         std::string name;
-        std::string filename;
-        std::string workpath;
-        std::string hashpath;
-        std::string outputpath;
+        std::string input_path;
+        std::string output_path;
+        std::string hash_path;
+
+        double min_duration;
+        double max_duration;
         
-        double minDuration;
-        double maxDuration;
-        
-        bool is_cache_hash_string = true;
-        
-        LoopVideo(std::string id, std::string filename, std::string workpath);
+        LoopVideo(std::string input, std::string output);
         
         void find_loop_video();
         void write_loop_video_files();
-
         
     private:
         cv::VideoCapture capture;

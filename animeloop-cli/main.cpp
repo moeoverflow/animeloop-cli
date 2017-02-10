@@ -7,34 +7,57 @@
 //
 
 #include <iostream>
-#include <vector>
-#include <sstream>
-#include <iomanip>
-#include <numeric>
-#include <fstream>
+#include <boost/filesystem.hpp>
 
-#include <opencv2/opencv.hpp>
-#include <opencv2/core/core.hpp>
-
+#include "cxxopts.hpp"
 #include "loop_video.hpp"
-#include "dHash.hpp"
-#include "aHash.hpp"
-#include "utils.hpp"
 
+const std::string kVersion = "1.0.0";
 
-const std::string kName = "test";
-const std::string kVideoPath = "~/cvworkspace/test.mp4";
-const std::string kOutputPath = "~/cvworkspace/test_loops";
-const std::string kWorkpath = "~/cvworkspace/animeloop/";
+int main(int argc, char * argv[]) {
 
-
-int main(int argc, const char * argv[]) {
-
-    al::LoopVideo loop_video(kName, kVideoPath, kWorkpath);
-    loop_video.minDuration = 0.9;
+    auto rpath = boost::filesystem::path(argv[0]).parent_path();
+    double min_duration, max_duration;
     
-    loop_video.find_loop_video();
-    loop_video.write_loop_video_files();
+    try {
+        cxxopts::Options options("animeloop", "anime loop video generator.");
+
+        std::string input, output;
+        
+        options.add_options()
+        ("h,help", "Show animeloop help")
+        ("v,version", "Show animeloop version")
+        ("i,input", "Input video file path", cxxopts::value<std::string>(input))
+        ("o,output", "Output video directory path", cxxopts::value<std::string>(output)->default_value(rpath.string()))
+        ("min-duration", "Min duration (second) of loop video", cxxopts::value<double>(min_duration)->default_value("0.8"))
+        ("max-duration", "Max duration (second) of loop video", cxxopts::value<double>(max_duration)->default_value("4.0"))
+        ;
+        
+        options.parse(argc, argv);
+        
+        if (options.count("version")) {
+            std::cout << "version: " << kVersion << std::endl;
+        }
+        
+        if (options.count("help")) {
+            std::cout << options.help() << std::endl;
+        }
+        
+        if (options.count("input")) {
+            al::LoopVideo loop_video(input, output);
+            loop_video.min_duration = min_duration;
+            loop_video.max_duration = max_duration;
+            
+            loop_video.find_loop_video();
+            loop_video.write_loop_video_files();
+        }
+        
+        
+    } catch (const cxxopts::OptionException& e) {
+        std::cout << "error parsing options: " << e.what() << std::endl;
+        exit(1);
+    }
+    
     
     return 0;
 }

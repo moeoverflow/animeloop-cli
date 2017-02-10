@@ -7,17 +7,19 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		881280F81E4C8E2000C5BAD8 /* libopencv_video.3.2.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 881280F61E4C8E2000C5BAD8 /* libopencv_video.3.2.0.dylib */; };
-		881280F91E4C8E2000C5BAD8 /* libopencv_videoio.3.2.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 881280F71E4C8E2000C5BAD8 /* libopencv_videoio.3.2.0.dylib */; };
+		88088C111E4E28B900601DBD /* libboost_filesystem.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 88088C101E4E28B900601DBD /* libboost_filesystem.dylib */; };
+		88088C121E4E294600601DBD /* libopencv_core.3.2.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 88537EA71E4C52CC00385BCB /* libopencv_core.3.2.0.dylib */; };
+		88088C131E4E294600601DBD /* libopencv_imgcodecs.3.2.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 88537EAA1E4C667500385BCB /* libopencv_imgcodecs.3.2.0.dylib */; };
+		88088C141E4E294600601DBD /* libopencv_imgproc.3.2.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 88537EAC1E4C671F00385BCB /* libopencv_imgproc.3.2.0.dylib */; };
+		88088C151E4E294600601DBD /* libopencv_video.3.2.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 881280F61E4C8E2000C5BAD8 /* libopencv_video.3.2.0.dylib */; };
+		88088C161E4E294600601DBD /* libopencv_videoio.3.2.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 881280F71E4C8E2000C5BAD8 /* libopencv_videoio.3.2.0.dylib */; };
+		88088C181E4E29E400601DBD /* libboost_system.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 88088C171E4E29E400601DBD /* libboost_system.dylib */; };
+		88088C1A1E4E333A00601DBD /* libboost_date_time.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 88088C191E4E333A00601DBD /* libboost_date_time.dylib */; };
 		881280FC1E4CADE000C5BAD8 /* utils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 881280FA1E4CADE000C5BAD8 /* utils.cpp */; };
 		881280FF1E4CAEEA00C5BAD8 /* dHash.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 881280FD1E4CAEEA00C5BAD8 /* dHash.cpp */; };
-		881281011E4CC93D00C5BAD8 /* libopencv_highgui.3.2.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 881281001E4CC93D00C5BAD8 /* libopencv_highgui.3.2.0.dylib */; };
 		8812810A1E4D321500C5BAD8 /* aHash.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 881281081E4D321500C5BAD8 /* aHash.cpp */; };
 		881281101E4DC8EA00C5BAD8 /* loop_video.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8812810E1E4DC8EA00C5BAD8 /* loop_video.cpp */; };
 		88537E9D1E4C501900385BCB /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88537E9C1E4C501900385BCB /* main.cpp */; };
-		88537EA81E4C52CC00385BCB /* libopencv_core.3.2.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 88537EA71E4C52CC00385BCB /* libopencv_core.3.2.0.dylib */; };
-		88537EAB1E4C667500385BCB /* libopencv_imgcodecs.3.2.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 88537EAA1E4C667500385BCB /* libopencv_imgcodecs.3.2.0.dylib */; };
-		88537EAD1E4C671F00385BCB /* libopencv_imgproc.3.2.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 88537EAC1E4C671F00385BCB /* libopencv_imgproc.3.2.0.dylib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -33,6 +35,10 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		88088C001E4E1BEF00601DBD /* cxxopts.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = cxxopts.hpp; sourceTree = "<group>"; };
+		88088C101E4E28B900601DBD /* libboost_filesystem.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libboost_filesystem.dylib; path = ../../../../../usr/local/Cellar/boost/1.63.0/lib/libboost_filesystem.dylib; sourceTree = "<group>"; };
+		88088C171E4E29E400601DBD /* libboost_system.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libboost_system.dylib; path = ../../../../../usr/local/Cellar/boost/1.63.0/lib/libboost_system.dylib; sourceTree = "<group>"; };
+		88088C191E4E333A00601DBD /* libboost_date_time.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libboost_date_time.dylib; path = ../../../../../usr/local/Cellar/boost/1.63.0/lib/libboost_date_time.dylib; sourceTree = "<group>"; };
 		881280F61E4C8E2000C5BAD8 /* libopencv_video.3.2.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopencv_video.3.2.0.dylib; path = ../../../../../usr/local/lib/libopencv_video.3.2.0.dylib; sourceTree = "<group>"; };
 		881280F71E4C8E2000C5BAD8 /* libopencv_videoio.3.2.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopencv_videoio.3.2.0.dylib; path = ../../../../../usr/local/lib/libopencv_videoio.3.2.0.dylib; sourceTree = "<group>"; };
 		881280FA1E4CADE000C5BAD8 /* utils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = utils.cpp; path = "animeloop-cli/utils.cpp"; sourceTree = "<group>"; };
@@ -56,12 +62,14 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				881281011E4CC93D00C5BAD8 /* libopencv_highgui.3.2.0.dylib in Frameworks */,
-				881280F81E4C8E2000C5BAD8 /* libopencv_video.3.2.0.dylib in Frameworks */,
-				881280F91E4C8E2000C5BAD8 /* libopencv_videoio.3.2.0.dylib in Frameworks */,
-				88537EAD1E4C671F00385BCB /* libopencv_imgproc.3.2.0.dylib in Frameworks */,
-				88537EAB1E4C667500385BCB /* libopencv_imgcodecs.3.2.0.dylib in Frameworks */,
-				88537EA81E4C52CC00385BCB /* libopencv_core.3.2.0.dylib in Frameworks */,
+				88088C1A1E4E333A00601DBD /* libboost_date_time.dylib in Frameworks */,
+				88088C181E4E29E400601DBD /* libboost_system.dylib in Frameworks */,
+				88088C121E4E294600601DBD /* libopencv_core.3.2.0.dylib in Frameworks */,
+				88088C131E4E294600601DBD /* libopencv_imgcodecs.3.2.0.dylib in Frameworks */,
+				88088C141E4E294600601DBD /* libopencv_imgproc.3.2.0.dylib in Frameworks */,
+				88088C151E4E294600601DBD /* libopencv_video.3.2.0.dylib in Frameworks */,
+				88088C161E4E294600601DBD /* libopencv_videoio.3.2.0.dylib in Frameworks */,
+				88088C111E4E28B900601DBD /* libboost_filesystem.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -83,11 +91,28 @@
 			name = "loop-video";
 			sourceTree = "<group>";
 		};
+		88088BFA1E4E1BEF00601DBD /* cxxopts */ = {
+			isa = PBXGroup;
+			children = (
+				88088BFF1E4E1BEF00601DBD /* include */,
+			);
+			path = cxxopts;
+			sourceTree = "<group>";
+		};
+		88088BFF1E4E1BEF00601DBD /* include */ = {
+			isa = PBXGroup;
+			children = (
+				88088C001E4E1BEF00601DBD /* cxxopts.hpp */,
+			);
+			path = include;
+			sourceTree = "<group>";
+		};
 		88537E901E4C501900385BCB = {
 			isa = PBXGroup;
 			children = (
 				88537E9B1E4C501900385BCB /* animeloop-cli */,
 				88088BF91E4DF6B700601DBD /* loop-video */,
+				88088BFA1E4E1BEF00601DBD /* cxxopts */,
 				88537E9A1E4C501900385BCB /* Products */,
 				88537EA61E4C52CC00385BCB /* Frameworks */,
 			);
@@ -112,6 +137,9 @@
 		88537EA61E4C52CC00385BCB /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				88088C191E4E333A00601DBD /* libboost_date_time.dylib */,
+				88088C171E4E29E400601DBD /* libboost_system.dylib */,
+				88088C101E4E28B900601DBD /* libboost_filesystem.dylib */,
 				881281001E4CC93D00C5BAD8 /* libopencv_highgui.3.2.0.dylib */,
 				881280F61E4C8E2000C5BAD8 /* libopencv_video.3.2.0.dylib */,
 				881280F71E4C8E2000C5BAD8 /* libopencv_videoio.3.2.0.dylib */,
@@ -285,6 +313,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					/usr/local/lib,
 					/usr/local/Cellar/ffmpeg/3.2.3/lib,
+					/usr/local/Cellar/boost/1.63.0/lib,
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -299,6 +328,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					/usr/local/lib,
 					/usr/local/Cellar/ffmpeg/3.2.3/lib,
+					/usr/local/Cellar/boost/1.63.0/lib,
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				PRODUCT_NAME = "$(TARGET_NAME)";

@@ -8,20 +8,27 @@
 
 #include "loop_video.hpp"
 #include <numeric>
+#include <boost/filesystem.hpp>
 
 #include "utils.hpp"
 #include "dHash.hpp"
 #include "aHash.hpp"
 
-al::LoopVideo::LoopVideo(std::string name, std::string filename, std::string workpath) {
-    this->name = name;
-    this->filename = filename;
-    this->workpath = workpath;
-    this->hashpath = workpath;
-    this->outputpath = workpath;
+al::LoopVideo::LoopVideo(std::string input, std::string output) {
+    this->input_path = input;
     
-    this->minDuration = 0.8;
-    this->maxDuration = 4;
+    auto path = boost::filesystem::path(input);
+    this->name = path.stem().string();
+    
+    this->output_path = boost::filesystem::path(output).append(this->name).string();
+    
+    this->min_duration = 0.8;
+    this->max_duration = 4;
+
+    
+    if (!boost::filesystem::exists(this->output_path)) {
+        boost::filesystem::create_directory(this->output_path);
+    }
 }
 
 void al::LoopVideo::find_loop_video() {
@@ -32,7 +39,7 @@ void al::LoopVideo::find_loop_video() {
 }
 
 bool al::LoopVideo::open_capture() {
-    bool flag = this->capture.open(this->filename);
+    bool flag = this->capture.open(this->input_path);
     this->update_capture_prop();
     return flag;
 }
@@ -55,7 +62,7 @@ void al::LoopVideo::update_capture_prop() {
  get hash strings.
  */
 void al::LoopVideo::get_hash_strings() {
-    std::string filename = this->hashpath + "/" + this->name + "_frame_dhash.txt";
+    std::string filename = boost::filesystem::path(output_path).append(this->name + "_dhash.txt").string();
     
     // Read video frames hash string if data file exists.
     HashVector hashs = read_vector_of_string_from_file(filename);
@@ -90,19 +97,19 @@ void al::LoopVideo::analyse_loop_durations() {
     // Find all possile loop video duration.
     al::LoopDurationVector possible_durations;
     std::vector<double> variances;
-    for (auto it = this->hash_strings.begin(); it != (this->hash_strings.end() - this->minDuration * this->fps); ++it) {
+    for (auto it = this->hash_strings.begin(); it != (this->hash_strings.end() - this->min_duration * this->fps); ++it) {
         long start = std::distance(this->hash_strings.begin(), it);
         long end = -1;
         
         std::vector<int> distances;
         std::vector<int> nearbyDistances;
         
-        for (int i = this->minDuration * this->fps; i < this->maxDuration * this->fps; ++i) {
+        for (int i = this->min_duration * this->fps; i < this->max_duration * this->fps; ++i) {
             if (it+i+1 == this->hash_strings.end()) {
                 break;
             }
             
-            if (i < this->minDuration * this->fps) {
+            if (i < this->min_duration * this->fps) {
                 continue;
             }
             
@@ -163,7 +170,7 @@ void al::LoopVideo::analyse_loop_durations() {
         int prev_start_frame = std::get<0>(*(it-1));
 
         
-        if (start_frame - prev_start_frame < this->minDuration * this->fps) {
+        if (start_frame - prev_start_frame < this->min_duration * this->fps) {
             continue;
         }
         
@@ -180,8 +187,8 @@ void al::LoopVideo::analyse_loop_durations() {
         capture.read(end_image);
         
         // Magic number: rows, cols
-        std::string begin_hash = aHash(begin_image, 8, 8);
-        std::string end_hash = aHash(end_image, 8, 8);
+        std::string begin_hash = aHash(begin_image, 16, 16);
+        std::string end_hash = aHash(end_image, 16, 16);
         
         this->capture.release();
         
@@ -200,6 +207,11 @@ void al::LoopVideo::analyse_loop_durations() {
  Write loop videos file.
  */
 void al::LoopVideo::write_loop_video_files() {
+    auto path = boost::filesystem::path(output_path);
+    if (!boost::filesystem::exists(path)) {
+        boost::filesystem::create_directory(path);
+    }
+    
     std::for_each(this->durations.begin(), this->durations.end(), [&](const LoopDuration duration) {
         int start_frame = std::get<0>(duration);
         int end_frame = std::get<1>(duration);
@@ -207,7 +219,7 @@ void al::LoopVideo::write_loop_video_files() {
         this->open_capture();
         this->capture.set(CV_CAP_PROP_POS_FRAMES, std::get<0>(duration));
         
-        std::string filename = this->outputpath + "/" + this->name + "_loop_from_" + std::to_string(start_frame / this->fps) + "s_to_" + std::to_string(end_frame/this->fps) + "s.mp4";
+        std::string filename = this->output_path + "/" + this->name + "_loop_from_" + convert_seconds_to_time(start_frame / this->fps) + "_to_" + convert_seconds_to_time(end_frame/this->fps) + ".mp4";
         cv::VideoWriter writer(filename, this->fourcc, this->fps, this->size);
         
         cv::Mat image;

@@ -8,7 +8,7 @@
 
 #include "utils.hpp"
 #include <fstream>
-
+#include <boost/date_time.hpp>
 
 unsigned int hamming_distance(std::string str1, std::string str2) {
     if (str1.empty() || str2.empty()) {
@@ -67,3 +67,11 @@ void write_vector_of_string_to_file(std::string filepath, std::vector<std::strin
     output_file.close();
     std::cout << "writing hash file.\n";
 }
+
+std::string convert_seconds_to_time(double seconds) {
+    auto sec = boost::posix_time::seconds(seconds);
+    auto time = boost::posix_time::time_duration(sec);
+    auto time_string = boost::posix_time::to_simple_string(time);
+    return time_string;
+}
+
