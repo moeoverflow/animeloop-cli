@@ -1,0 +1,332 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		881280F81E4C8E2000C5BAD8 /* libopencv_video.3.2.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 881280F61E4C8E2000C5BAD8 /* libopencv_video.3.2.0.dylib */; };
+		881280F91E4C8E2000C5BAD8 /* libopencv_videoio.3.2.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 881280F71E4C8E2000C5BAD8 /* libopencv_videoio.3.2.0.dylib */; };
+		881280FC1E4CADE000C5BAD8 /* utils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 881280FA1E4CADE000C5BAD8 /* utils.cpp */; };
+		881280FF1E4CAEEA00C5BAD8 /* dHash.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 881280FD1E4CAEEA00C5BAD8 /* dHash.cpp */; };
+		881281011E4CC93D00C5BAD8 /* libopencv_highgui.3.2.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 881281001E4CC93D00C5BAD8 /* libopencv_highgui.3.2.0.dylib */; };
+		8812810A1E4D321500C5BAD8 /* aHash.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 881281081E4D321500C5BAD8 /* aHash.cpp */; };
+		881281101E4DC8EA00C5BAD8 /* loop_video.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8812810E1E4DC8EA00C5BAD8 /* loop_video.cpp */; };
+		88537E9D1E4C501900385BCB /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88537E9C1E4C501900385BCB /* main.cpp */; };
+		88537EA81E4C52CC00385BCB /* libopencv_core.3.2.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 88537EA71E4C52CC00385BCB /* libopencv_core.3.2.0.dylib */; };
+		88537EAB1E4C667500385BCB /* libopencv_imgcodecs.3.2.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 88537EAA1E4C667500385BCB /* libopencv_imgcodecs.3.2.0.dylib */; };
+		88537EAD1E4C671F00385BCB /* libopencv_imgproc.3.2.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 88537EAC1E4C671F00385BCB /* libopencv_imgproc.3.2.0.dylib */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		88537E971E4C501900385BCB /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		881280F61E4C8E2000C5BAD8 /* libopencv_video.3.2.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopencv_video.3.2.0.dylib; path = ../../../../../usr/local/lib/libopencv_video.3.2.0.dylib; sourceTree = "<group>"; };
+		881280F71E4C8E2000C5BAD8 /* libopencv_videoio.3.2.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopencv_videoio.3.2.0.dylib; path = ../../../../../usr/local/lib/libopencv_videoio.3.2.0.dylib; sourceTree = "<group>"; };
+		881280FA1E4CADE000C5BAD8 /* utils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = utils.cpp; path = "animeloop-cli/utils.cpp"; sourceTree = "<group>"; };
+		881280FB1E4CADE000C5BAD8 /* utils.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = utils.hpp; path = "animeloop-cli/utils.hpp"; sourceTree = "<group>"; };
+		881280FD1E4CAEEA00C5BAD8 /* dHash.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = dHash.cpp; path = "animeloop-cli/dHash.cpp"; sourceTree = "<group>"; };
+		881280FE1E4CAEEA00C5BAD8 /* dHash.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = dHash.hpp; path = "animeloop-cli/dHash.hpp"; sourceTree = "<group>"; };
+		881281001E4CC93D00C5BAD8 /* libopencv_highgui.3.2.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopencv_highgui.3.2.0.dylib; path = ../../../../../usr/local/lib/libopencv_highgui.3.2.0.dylib; sourceTree = "<group>"; };
+		881281081E4D321500C5BAD8 /* aHash.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = aHash.cpp; path = "animeloop-cli/aHash.cpp"; sourceTree = "<group>"; };
+		881281091E4D321500C5BAD8 /* aHash.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = aHash.hpp; path = "animeloop-cli/aHash.hpp"; sourceTree = "<group>"; };
+		8812810E1E4DC8EA00C5BAD8 /* loop_video.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = loop_video.cpp; path = "animeloop-cli/loop_video.cpp"; sourceTree = "<group>"; };
+		8812810F1E4DC8EA00C5BAD8 /* loop_video.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = loop_video.hpp; path = "animeloop-cli/loop_video.hpp"; sourceTree = "<group>"; };
+		88537E991E4C501900385BCB /* animeloop-cli */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "animeloop-cli"; sourceTree = BUILT_PRODUCTS_DIR; };
+		88537E9C1E4C501900385BCB /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		88537EA71E4C52CC00385BCB /* libopencv_core.3.2.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopencv_core.3.2.0.dylib; path = ../../../../../usr/local/lib/libopencv_core.3.2.0.dylib; sourceTree = "<group>"; };
+		88537EAA1E4C667500385BCB /* libopencv_imgcodecs.3.2.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopencv_imgcodecs.3.2.0.dylib; path = ../../../../../usr/local/lib/libopencv_imgcodecs.3.2.0.dylib; sourceTree = "<group>"; };
+		88537EAC1E4C671F00385BCB /* libopencv_imgproc.3.2.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopencv_imgproc.3.2.0.dylib; path = ../../../../../usr/local/lib/libopencv_imgproc.3.2.0.dylib; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		88537E961E4C501900385BCB /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				881281011E4CC93D00C5BAD8 /* libopencv_highgui.3.2.0.dylib in Frameworks */,
+				881280F81E4C8E2000C5BAD8 /* libopencv_video.3.2.0.dylib in Frameworks */,
+				881280F91E4C8E2000C5BAD8 /* libopencv_videoio.3.2.0.dylib in Frameworks */,
+				88537EAD1E4C671F00385BCB /* libopencv_imgproc.3.2.0.dylib in Frameworks */,
+				88537EAB1E4C667500385BCB /* libopencv_imgcodecs.3.2.0.dylib in Frameworks */,
+				88537EA81E4C52CC00385BCB /* libopencv_core.3.2.0.dylib in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		88088BF91E4DF6B700601DBD /* loop-video */ = {
+			isa = PBXGroup;
+			children = (
+				881280FB1E4CADE000C5BAD8 /* utils.hpp */,
+				881280FA1E4CADE000C5BAD8 /* utils.cpp */,
+				881280FE1E4CAEEA00C5BAD8 /* dHash.hpp */,
+				881280FD1E4CAEEA00C5BAD8 /* dHash.cpp */,
+				881281091E4D321500C5BAD8 /* aHash.hpp */,
+				881281081E4D321500C5BAD8 /* aHash.cpp */,
+				8812810F1E4DC8EA00C5BAD8 /* loop_video.hpp */,
+				8812810E1E4DC8EA00C5BAD8 /* loop_video.cpp */,
+			);
+			name = "loop-video";
+			sourceTree = "<group>";
+		};
+		88537E901E4C501900385BCB = {
+			isa = PBXGroup;
+			children = (
+				88537E9B1E4C501900385BCB /* animeloop-cli */,
+				88088BF91E4DF6B700601DBD /* loop-video */,
+				88537E9A1E4C501900385BCB /* Products */,
+				88537EA61E4C52CC00385BCB /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		88537E9A1E4C501900385BCB /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				88537E991E4C501900385BCB /* animeloop-cli */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		88537E9B1E4C501900385BCB /* animeloop-cli */ = {
+			isa = PBXGroup;
+			children = (
+				88537E9C1E4C501900385BCB /* main.cpp */,
+			);
+			path = "animeloop-cli";
+			sourceTree = "<group>";
+		};
+		88537EA61E4C52CC00385BCB /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				881281001E4CC93D00C5BAD8 /* libopencv_highgui.3.2.0.dylib */,
+				881280F61E4C8E2000C5BAD8 /* libopencv_video.3.2.0.dylib */,
+				881280F71E4C8E2000C5BAD8 /* libopencv_videoio.3.2.0.dylib */,
+				88537EAC1E4C671F00385BCB /* libopencv_imgproc.3.2.0.dylib */,
+				88537EAA1E4C667500385BCB /* libopencv_imgcodecs.3.2.0.dylib */,
+				88537EA71E4C52CC00385BCB /* libopencv_core.3.2.0.dylib */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		88537E981E4C501900385BCB /* animeloop-cli */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 88537EA01E4C501900385BCB /* Build configuration list for PBXNativeTarget "animeloop-cli" */;
+			buildPhases = (
+				88537E951E4C501900385BCB /* Sources */,
+				88537E961E4C501900385BCB /* Frameworks */,
+				88537E971E4C501900385BCB /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "animeloop-cli";
+			productName = "animeloop-cli";
+			productReference = 88537E991E4C501900385BCB /* animeloop-cli */;
+			productType = "com.apple.product-type.tool";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		88537E911E4C501900385BCB /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0820;
+				ORGANIZATIONNAME = ShinCurry;
+				TargetAttributes = {
+					88537E981E4C501900385BCB = {
+						CreatedOnToolsVersion = 8.2.1;
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = 88537E941E4C501900385BCB /* Build configuration list for PBXProject "animeloop-cli" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 88537E901E4C501900385BCB;
+			productRefGroup = 88537E9A1E4C501900385BCB /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				88537E981E4C501900385BCB /* animeloop-cli */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		88537E951E4C501900385BCB /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				881280FC1E4CADE000C5BAD8 /* utils.cpp in Sources */,
+				88537E9D1E4C501900385BCB /* main.cpp in Sources */,
+				881280FF1E4CAEEA00C5BAD8 /* dHash.cpp in Sources */,
+				8812810A1E4D321500C5BAD8 /* aHash.cpp in Sources */,
+				881281101E4DC8EA00C5BAD8 /* loop_video.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		88537E9E1E4C501900385BCB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.12;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		88537E9F1E4C501900385BCB /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.12;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		88537EA11E4C501900385BCB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_WARN_DOCUMENTATION_COMMENTS = NO;
+				HEADER_SEARCH_PATHS = /usr/local/include;
+				LIBRARY_SEARCH_PATHS = (
+					/usr/local/lib,
+					/usr/local/Cellar/ffmpeg/3.2.3/lib,
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		88537EA21E4C501900385BCB /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_WARN_DOCUMENTATION_COMMENTS = NO;
+				HEADER_SEARCH_PATHS = /usr/local/include;
+				LIBRARY_SEARCH_PATHS = (
+					/usr/local/lib,
+					/usr/local/Cellar/ffmpeg/3.2.3/lib,
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		88537E941E4C501900385BCB /* Build configuration list for PBXProject "animeloop-cli" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				88537E9E1E4C501900385BCB /* Debug */,
+				88537E9F1E4C501900385BCB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		88537EA01E4C501900385BCB /* Build configuration list for PBXNativeTarget "animeloop-cli" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				88537EA11E4C501900385BCB /* Debug */,
+				88537EA21E4C501900385BCB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 88537E911E4C501900385BCB /* Project object */;
+}
