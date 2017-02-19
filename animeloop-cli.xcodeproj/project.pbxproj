@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		88010DFF1E52EA6F001CC77B /* loop_video.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8812810E1E4DC8EA00C5BAD8 /* loop_video.cpp */; };
 		88088C111E4E28B900601DBD /* libboost_filesystem.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 88088C101E4E28B900601DBD /* libboost_filesystem.dylib */; };
 		88088C121E4E294600601DBD /* libopencv_core.3.2.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 88537EA71E4C52CC00385BCB /* libopencv_core.3.2.0.dylib */; };
 		88088C131E4E294600601DBD /* libopencv_imgcodecs.3.2.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 88537EAA1E4C667500385BCB /* libopencv_imgcodecs.3.2.0.dylib */; };
@@ -16,10 +17,8 @@
 		88088C181E4E29E400601DBD /* libboost_system.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 88088C171E4E29E400601DBD /* libboost_system.dylib */; };
 		88088C1A1E4E333A00601DBD /* libboost_date_time.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 88088C191E4E333A00601DBD /* libboost_date_time.dylib */; };
 		881280FC1E4CADE000C5BAD8 /* utils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 881280FA1E4CADE000C5BAD8 /* utils.cpp */; };
-		881280FF1E4CAEEA00C5BAD8 /* dHash.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 881280FD1E4CAEEA00C5BAD8 /* dHash.cpp */; };
-		8812810A1E4D321500C5BAD8 /* aHash.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 881281081E4D321500C5BAD8 /* aHash.cpp */; };
-		881281101E4DC8EA00C5BAD8 /* loop_video.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8812810E1E4DC8EA00C5BAD8 /* loop_video.cpp */; };
 		88537E9D1E4C501900385BCB /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88537E9C1E4C501900385BCB /* main.cpp */; };
+		88DC61451E585CCE0062B914 /* algorithm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88DC61431E585CCE0062B914 /* algorithm.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -43,11 +42,7 @@
 		881280F71E4C8E2000C5BAD8 /* libopencv_videoio.3.2.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopencv_videoio.3.2.0.dylib; path = ../../../../../usr/local/lib/libopencv_videoio.3.2.0.dylib; sourceTree = "<group>"; };
 		881280FA1E4CADE000C5BAD8 /* utils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = utils.cpp; path = "animeloop-cli/utils.cpp"; sourceTree = "<group>"; };
 		881280FB1E4CADE000C5BAD8 /* utils.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = utils.hpp; path = "animeloop-cli/utils.hpp"; sourceTree = "<group>"; };
-		881280FD1E4CAEEA00C5BAD8 /* dHash.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = dHash.cpp; path = "animeloop-cli/dHash.cpp"; sourceTree = "<group>"; };
-		881280FE1E4CAEEA00C5BAD8 /* dHash.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = dHash.hpp; path = "animeloop-cli/dHash.hpp"; sourceTree = "<group>"; };
 		881281001E4CC93D00C5BAD8 /* libopencv_highgui.3.2.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopencv_highgui.3.2.0.dylib; path = ../../../../../usr/local/lib/libopencv_highgui.3.2.0.dylib; sourceTree = "<group>"; };
-		881281081E4D321500C5BAD8 /* aHash.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = aHash.cpp; path = "animeloop-cli/aHash.cpp"; sourceTree = "<group>"; };
-		881281091E4D321500C5BAD8 /* aHash.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = aHash.hpp; path = "animeloop-cli/aHash.hpp"; sourceTree = "<group>"; };
 		8812810E1E4DC8EA00C5BAD8 /* loop_video.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = loop_video.cpp; path = "animeloop-cli/loop_video.cpp"; sourceTree = "<group>"; };
 		8812810F1E4DC8EA00C5BAD8 /* loop_video.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = loop_video.hpp; path = "animeloop-cli/loop_video.hpp"; sourceTree = "<group>"; };
 		88537E991E4C501900385BCB /* animeloop-cli */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "animeloop-cli"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -55,6 +50,8 @@
 		88537EA71E4C52CC00385BCB /* libopencv_core.3.2.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopencv_core.3.2.0.dylib; path = ../../../../../usr/local/lib/libopencv_core.3.2.0.dylib; sourceTree = "<group>"; };
 		88537EAA1E4C667500385BCB /* libopencv_imgcodecs.3.2.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopencv_imgcodecs.3.2.0.dylib; path = ../../../../../usr/local/lib/libopencv_imgcodecs.3.2.0.dylib; sourceTree = "<group>"; };
 		88537EAC1E4C671F00385BCB /* libopencv_imgproc.3.2.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopencv_imgproc.3.2.0.dylib; path = ../../../../../usr/local/lib/libopencv_imgproc.3.2.0.dylib; sourceTree = "<group>"; };
+		88DC61431E585CCE0062B914 /* algorithm.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = algorithm.cpp; path = "animeloop-cli/algorithm.cpp"; sourceTree = "<group>"; };
+		88DC61441E585CCE0062B914 /* algorithm.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = algorithm.hpp; path = "animeloop-cli/algorithm.hpp"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -79,14 +76,12 @@
 		88088BF91E4DF6B700601DBD /* loop-video */ = {
 			isa = PBXGroup;
 			children = (
-				881280FB1E4CADE000C5BAD8 /* utils.hpp */,
 				881280FA1E4CADE000C5BAD8 /* utils.cpp */,
-				881280FE1E4CAEEA00C5BAD8 /* dHash.hpp */,
-				881280FD1E4CAEEA00C5BAD8 /* dHash.cpp */,
-				881281091E4D321500C5BAD8 /* aHash.hpp */,
-				881281081E4D321500C5BAD8 /* aHash.cpp */,
-				8812810F1E4DC8EA00C5BAD8 /* loop_video.hpp */,
+				881280FB1E4CADE000C5BAD8 /* utils.hpp */,
 				8812810E1E4DC8EA00C5BAD8 /* loop_video.cpp */,
+				8812810F1E4DC8EA00C5BAD8 /* loop_video.hpp */,
+				88DC61431E585CCE0062B914 /* algorithm.cpp */,
+				88DC61441E585CCE0062B914 /* algorithm.hpp */,
 			);
 			name = "loop-video";
 			sourceTree = "<group>";
@@ -208,10 +203,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				881280FC1E4CADE000C5BAD8 /* utils.cpp in Sources */,
+				88DC61451E585CCE0062B914 /* algorithm.cpp in Sources */,
 				88537E9D1E4C501900385BCB /* main.cpp in Sources */,
-				881280FF1E4CAEEA00C5BAD8 /* dHash.cpp in Sources */,
-				8812810A1E4D321500C5BAD8 /* aHash.cpp in Sources */,
-				881281101E4DC8EA00C5BAD8 /* loop_video.cpp in Sources */,
+				88010DFF1E52EA6F001CC77B /* loop_video.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

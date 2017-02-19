@@ -12,8 +12,7 @@
 #include <iostream>
 #include <vector>
 
-unsigned int hamming_distance(std::string str1, std::string str2);
-unsigned int hamming_distance(int64_t n1, int64_t n2);
+
 
 std::vector<std::string> read_vector_of_string_from_file(std::string filepath);
 void write_vector_of_string_to_file(std::string filepath, std::vector<std::string>);

@@ -14,7 +14,7 @@
 
 namespace al {    
     typedef std::tuple<int, int, double> LoopDuration;
-    typedef std::vector<LoopDuration> LoopDurationVector;
+    typedef std::vector<LoopDuration> LoopDurations;
     typedef std::vector<std::string> HashVector;
     
     class LoopVideo {
@@ -27,28 +27,48 @@ namespace al {
         double min_duration;
         double max_duration;
         
+        HashVector dHash_strings;
+//        LoopDurations durations;
+        
         LoopVideo(std::string input, std::string output);
         
-        void find_loop_video();
-        void write_loop_video_files();
+        al::LoopDurations find_loop_parts();
+        void save_loop_parts();
         
-    private:
         cv::VideoCapture capture;
-        HashVector hash_strings;
-        LoopDurationVector durations;
         
         double fps;
         double fourcc;
         cv::Size size;
         int frame_count;
         
+        
         bool open_capture();
         void update_capture_prop();
-//        void close_capture();
+        void close_capture();
         
-        void get_hash_strings();
-        void analyse_loop_durations();
+        void save_loop_parts(al::LoopDurations durations);
     };
+    
+    bool open_capture();
+    
+    void update_capture_prop();
+    
+    //void close_capture();
+    
+    std::vector<std::string> get_hash_strings(al::LoopVideo *loop_video, std::string hash_type);
+
+    std::vector<std::string> restore_hash_strings(std::string filepath);
+    
+    
+    void save_hash_strings(std::string filepath, std::vector<std::string> hashs);
+    
+    std::string time_string(double seconds);
+    
+    double get_variance_of_distances(std::vector<int> distances);
+    
+    double get_mean_of_images(cv::Mat image);
 }
+
 
 #endif /* loop_video_hpp */
