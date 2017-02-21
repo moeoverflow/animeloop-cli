@@ -11,6 +11,8 @@
 
 #include <iostream>
 #include <opencv2/opencv.hpp>
+#include <boost/filesystem.hpp>
+
 
 namespace al {    
     typedef std::tuple<int, int, double> LoopDuration;
@@ -19,18 +21,20 @@ namespace al {
     
     class LoopVideo {
     public:
-        std::string name;
-        std::string input_path;
-        std::string output_path;
-        std::string hash_path;
-
-        double min_duration;
-        double max_duration;
+        std::string filename;
+        std::string title;
+        boost::filesystem::path input_path;
+        boost::filesystem::path output_path;
+        boost::filesystem::path caches_path;
+        std::string output_type = "mp4";
+        std::string dHash_file_path;
+        
+        double min_duration = 0.8;
+        double max_duration = 4;
         
         HashVector dHash_strings;
-//        LoopDurations durations;
         
-        LoopVideo(std::string input, std::string output);
+        LoopVideo(std::string title, std::string input, std::string output);
         
         al::LoopDurations find_loop_parts();
         void save_loop_parts();
@@ -47,20 +51,15 @@ namespace al {
         void update_capture_prop();
         void close_capture();
         
+        std::vector<std::string> get_hash_strings(std::string hash_type);
         void save_loop_parts(al::LoopDurations durations);
+    private:
+        std::string md5;
     };
     
-    bool open_capture();
     
-    void update_capture_prop();
     
-    //void close_capture();
-    
-    std::vector<std::string> get_hash_strings(al::LoopVideo *loop_video, std::string hash_type);
-
     std::vector<std::string> restore_hash_strings(std::string filepath);
-    
-    
     void save_hash_strings(std::string filepath, std::vector<std::string> hashs);
     
     std::string time_string(double seconds);
@@ -68,6 +67,8 @@ namespace al {
     double get_variance_of_distances(std::vector<int> distances);
     
     double get_mean_of_images(cv::Mat image);
+    
+    std::string md5_of_file(std::string filename);
 }
 
 

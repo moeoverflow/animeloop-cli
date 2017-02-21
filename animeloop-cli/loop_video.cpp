@@ -7,33 +7,42 @@
 //
 
 #include "loop_video.hpp"
-#include <numeric>
-#include <boost/filesystem.hpp>
-#include <boost/date_time.hpp>
-
-#include "utils.hpp"
 #include "algorithm.hpp"
+#include "json.h"
+
+#include <boost/filesystem.hpp>
+#include <boost/uuid/uuid.hpp>
+#include <boost/uuid/uuid_generators.hpp>
+#include <boost/uuid/uuid_io.hpp>
+#include <boost/date_time/posix_time/posix_time.hpp>
+#include <boost/date_time/posix_time/posix_time_io.hpp>
+#include <locale>
+#include <fstream>
+#include <numeric>
+#include <string>
+#include <openssl/md5.h>
 
 
-al::LoopVideo::LoopVideo(std::string input, std::string output) {
-    this->input_path = input;
-    
-    auto path = boost::filesystem::path(input);
-    this->name = path.stem().string();
-    
-    this->output_path = boost::filesystem::path(output).append(this->name).string();
-    
-    this->min_duration = 0.8;
-    this->max_duration = 4;
+al::LoopVideo::LoopVideo(std::string title, std::string input, std::string output) {
+    this->title = title;
 
+    this->filename = boost::filesystem::path(input).stem().string();
+    this->input_path = boost::filesystem::path(input);
+    this->output_path = boost::filesystem::path(output).append("loops").append(this->filename);
+    this->caches_path = boost::filesystem::path(output).append("caches").append(this->filename);
+
+    this->md5 = al::md5_of_file(this->input_path.string());
     
     if (!boost::filesystem::exists(this->output_path)) {
         boost::filesystem::create_directories(this->output_path);
     }
+    if (!boost::filesystem::exists(this->caches_path)) {
+        boost::filesystem::create_directories(this->caches_path);
+    }
 }
 
 al::LoopDurations al::LoopVideo::find_loop_parts() {
-    this->dHash_strings = al::get_hash_strings(this, "dHash");
+    this->dHash_strings = this->get_hash_strings("dHash");
     
     // Find all possile loop video duration.
     std::cout << "Finding possile loop parts..." << std::endl;
@@ -46,7 +55,8 @@ al::LoopDurations al::LoopVideo::find_loop_parts() {
     for (auto it = this->dHash_strings.begin(); it != (this->dHash_strings.end() - min_duration_frame); ++it) {
         
         long begin = std::distance(this->dHash_strings.begin(), it);
-        long end = -1;
+        long end;
+        std::vector<long> ends;
         
         std::vector<int> distances;
         for (int i = min_duration_frame; i < max_duration_frame; ++i) {
@@ -58,13 +68,15 @@ al::LoopDurations al::LoopVideo::find_loop_parts() {
             distances.push_back(distance);
             
             if (distance == 0) {
-                end = begin+i;
+                ends.push_back(begin+i);
             }
         }
         
-        if (end == -1) {
+        if (ends.empty()) {
             continue;
         }
+        
+        end = ends[ends.size()/2];
         
         std::vector<int> nearby_distances;
         
@@ -75,7 +87,7 @@ al::LoopDurations al::LoopVideo::find_loop_parts() {
         
         double variance = al::get_variance_of_distances(nearby_distances);
         
-        if (variance > 1.0) {
+        if (variance > 1.2) {
             variances.push_back(variance);
             possible_durations.push_back(std::make_tuple(begin, end, variance));
         }
@@ -107,19 +119,19 @@ al::LoopDurations al::LoopVideo::find_loop_parts() {
         cv::Mat end_image;
         capture.read(end_image);
         this->capture.release();
-        
+
         double mean1 = al::get_mean_of_images(begin_image);
-        if (mean1 < 0.001) {
+        if (mean1 < 20) {
             continue;
         }
         double mean2 = al::get_mean_of_images(end_image);
-        if (mean2 < 0.001) {
+        if (mean2 < 20) {
             continue;
         }
         
-        std::string begin_hash = pHash(begin_image, 8);
-        std::string end_hash = pHash(end_image, 8);
-        int distance = hamming_distance(begin_hash, end_hash);
+        std::string begin_pHash = pHash(begin_image, 8);
+        std::string end_pHash = pHash(end_image, 8);
+        int distance = hamming_distance(begin_pHash, end_pHash);
         if (distance > 0) {
             continue;
         }
@@ -138,17 +150,29 @@ void al::LoopVideo::save_loop_parts(al::LoopDurations durations) {
     if (!boost::filesystem::exists(path)) {
         boost::filesystem::create_directory(path);
     }
+
+    Json::Value videos_json;
+    videos_json["title"] = this->title;
+    
+    Json::Value source_json;
+    source_json["filename"] = this->filename;
+    source_json["md5"] = this->md5;
+    videos_json["source"].append(source_json);
     
     std::for_each(durations.begin(), durations.end(), [&](const LoopDuration duration) {
+        auto uuid = boost::uuids::random_generator()();
+        auto uuid_string = boost::uuids::to_string(uuid);
+        std::string output_filename = uuid_string + "." + this->output_type;
+    
         int start_frame = std::get<0>(duration);
         int end_frame = std::get<1>(duration);
         
         this->open_capture();
         this->capture.set(CV_CAP_PROP_POS_FRAMES, std::get<0>(duration));
         
-        std::string filename = this->output_path + "/" + this->name + "_loop_from_" + time_string(start_frame / this->fps) + "_to_" + time_string(end_frame/this->fps) + ".mp4";
-        cv::VideoWriter writer(filename, this->fourcc, this->fps, this->size);
-        
+        // Save video file.
+        auto output_path = this->output_path;
+        cv::VideoWriter writer(output_path.append(output_filename).string(), this->fourcc, this->fps, this->size);
         cv::Mat image;
         int frame = start_frame;
         while (capture.read(image)) {
@@ -158,12 +182,38 @@ void al::LoopVideo::save_loop_parts(al::LoopDurations durations) {
             writer.write(image);
             frame++;
         }
+        writer.release();
         capture.release();
+        
+        // Save video info json file.
+        Json::Value video_json;
+        
+        video_json["filename"] = output_filename;
+
+        video_json["duration"] = (end_frame - start_frame) / this->fps;
+        
+        Json::Value frame_json;
+        frame_json["start"] = start_frame;
+        frame_json["end"] = end_frame;
+        video_json["frame"] = frame_json;
+        
+        Json::Value time_json;
+        time_json["start"] = al::time_string(start_frame / this->fps);
+        time_json["end"] = al::time_string(end_frame / this->fps);
+        video_json["time"] = time_json;
+        
+        videos_json["loops"].append(video_json);
     });
+    
+    std::string json_string = videos_json.toStyledString();
+    auto caches_path = this->caches_path;
+    std::ofstream out(caches_path.append(this->filename + ".json").string());
+    out << json_string;
+    out.close();
 }
 
 bool al::LoopVideo::open_capture() {
-    bool flag = this->capture.open(this->input_path);
+    bool flag = this->capture.open(this->input_path.string());
     this->update_capture_prop();
     return flag;
 }
@@ -182,36 +232,43 @@ void al::LoopVideo::close_capture() {
 }
 
 
-
-std::vector<std::string> al::get_hash_strings(al::LoopVideo *loop_video, std::string hash_type) {
-    std::cout << "Calculating hash value..." << std::endl;
-
-    std::string filename = boost::filesystem::path(loop_video->output_path).append(loop_video->name + "_" + hash_type + ".txt").string();
+std::vector<std::string> al::LoopVideo::get_hash_strings(std::string hash_type) {
+    auto caches_path = this->caches_path;
+    std::string filename = caches_path.append(this->md5 + "_" + hash_type + ".txt").string();
     
-    // Read video frames hash string if data file exists.
-    al::HashVector hashs = al::restore_hash_strings(filename);
-    bool hash_from_file = !hashs.empty();
-    
-    // Calculate hash string per frame when data file does not exist.
-    loop_video->open_capture();
-    if (!hash_from_file) {
+    auto hash_from_file = boost::filesystem::exists(filename);
+    al::HashVector hashs;
+    this->open_capture();
+    if (hash_from_file) {
+        // Read video frames hash string from file.
+        hashs = al::restore_hash_strings(filename);
+    } else {
+        // Calculate hash string per frame.
+        std::cout << "Calculating hash value... 0%" << std::endl;
+        int percent = 0;
+        int count = 0, total = this->frame_count;
         cv::Mat image;
-        while (loop_video->capture.read(image)) {
+        while (this->capture.read(image)) {
+            if (count / double(total) * 100 > percent) {
+                percent++;
+                std::cout << "Calculating hash value... " << percent << "%" << std::endl;
+            }
+            
             std::string hash = al::hash(hash_type, image, 8);
             hashs.push_back(hash);
             image.release();
+            count++;
         }
         // Write video frames hash string when data file does not exist.
         al::save_hash_strings(filename, hashs);
     }
-    loop_video->close_capture();
-    
+    this->close_capture();
     return hashs;
 }
 
 std::vector<std::string> al::restore_hash_strings(std::string filepath) {
     std::cout << "Restore hash value from file..." << std::endl;
-
+    
     std::ifstream input_file(filepath);
     std::vector<std::string> hashs;
     
@@ -237,10 +294,11 @@ void al::save_hash_strings(std::string filepath, std::vector<std::string> hashs)
 
 double al::get_variance_of_distances(std::vector<int> distances) {
     double sum = std::accumulate(distances.begin(), distances.end(), 0.0);
-    double average =  sum / distances.size();
+    double mean =  sum / distances.size();
     double accum  = 0.0;
+    
     std::for_each(distances.begin(), distances.end(), [&](const double distance) {
-        accum += (distance-average) * (distance-average);
+        accum += (distance-mean) * (distance-mean);
     });
     double variance = sqrt(accum / (distances.size() - 1));
     return variance;
@@ -253,8 +311,31 @@ double al::get_mean_of_images(cv::Mat image) {
 }
 
 std::string al::time_string(double seconds) {
-    auto sec = boost::posix_time::seconds(seconds);
-    auto time = boost::posix_time::time_duration(sec);
-    auto time_string = boost::posix_time::to_simple_string(time);
-    return time_string;
+    auto ms = boost::posix_time::milliseconds(seconds * 1000);
+    auto time = boost::posix_time::time_duration(ms);
+    return boost::posix_time::to_simple_string(time);
 }
+
+std::string al::md5_of_file(std::string filename) {
+    MD5_CTX ctx;
+    MD5_Init(&ctx);
+    
+    std::ifstream ifs(filename, std::ios::binary);
+    
+    char file_buffer[4096];
+    while (ifs.read(file_buffer, sizeof(file_buffer)) || ifs.gcount()) {
+        MD5_Update(&ctx, file_buffer, ifs.gcount());
+    }
+    unsigned char digest[MD5_DIGEST_LENGTH] = {};
+    MD5_Final(digest, &ctx);
+    
+    std::stringstream stream;
+    for(unsigned i=0; i <MD5_DIGEST_LENGTH; i++) {
+        stream << std::hex << std::setw(2) << std::setfill('0') << static_cast<int>(digest[i]);
+    }
+    std::string md5_string = stream.str();
+    return md5_string;
+}
+
+
+

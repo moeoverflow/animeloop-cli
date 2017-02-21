@@ -12,6 +12,12 @@
 #include <iomanip>
 #include <numeric>
 
+void cvt_image(cv::Mat &image, int length) {
+    if(3 == image.channels()) {
+        cv::cvtColor(image, image, CV_RGB2GRAY);
+    }
+    cv::resize(image, image, cv::Size(length, length));
+}
 
 std::string al::hash(std::string type, cv::Mat image, int length) {
     std::transform(type.begin(), type.end(), type.begin(), tolower);
@@ -27,9 +33,7 @@ std::string al::hash(std::string type, cv::Mat image, int length) {
 }
 
 std::string al::aHash(cv::Mat image, int length) {
-    auto size = cv::Size(length, length);
-    cv::resize(image, image, size);
-    cv::cvtColor(image, image, CV_RGB2GRAY);
+    cvt_image(image, length);
     
     int sum = std::accumulate(image.begin<uchar>(), image.end<uchar>(), 0.00);
     int average = sum / image.cols / image.rows;
@@ -45,14 +49,12 @@ std::string al::aHash(cv::Mat image, int length) {
 
 
 std::string al::dHash(cv::Mat image, int length) {
-    auto size = cv::Size(length, length);
-    cv::resize(image, image, size);
-    cv::cvtColor(image, image, CV_RGB2GRAY);
+    cvt_image(image, length);
     
     std::string hash_string = "";
-    for (int row = 0; row < size.height; ++row) {
-        int row_start_index = row * size.width;
-        for (int col = 0; col < size.width-1; ++col) {
+    for (int row = 0; row < length; ++row) {
+        int row_start_index = row * length;
+        for (int col = 0; col < length-1; ++col) {
             int col_left_index = row_start_index + col;
             bool diff = image.at<uchar>(col_left_index) > image.at<uchar>(col_left_index+1);
             hash_string += diff ? "1" : "0";
@@ -62,11 +64,8 @@ std::string al::dHash(cv::Mat image, int length) {
 }
 
 std::string al::pHash(cv::Mat image, int length) {
-    if(3 == image.channels()) {
-        cv::cvtColor(image, image, CV_RGB2GRAY);
-    }
-    auto size = cv::Size(length, length);
-    cv::resize(image, image, size);
+    cvt_image(image, length);
+
     cv::Mat img = cv::Mat_<double>(image);
     cv::dct(img, img);
     

@@ -16,9 +16,10 @@
 		88088C161E4E294600601DBD /* libopencv_videoio.3.2.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 881280F71E4C8E2000C5BAD8 /* libopencv_videoio.3.2.0.dylib */; };
 		88088C181E4E29E400601DBD /* libboost_system.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 88088C171E4E29E400601DBD /* libboost_system.dylib */; };
 		88088C1A1E4E333A00601DBD /* libboost_date_time.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 88088C191E4E333A00601DBD /* libboost_date_time.dylib */; };
-		881280FC1E4CADE000C5BAD8 /* utils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 881280FA1E4CADE000C5BAD8 /* utils.cpp */; };
+		883E5A5D1E5C346C004E1554 /* libcrypto.1.0.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 883E5A5C1E5C346C004E1554 /* libcrypto.1.0.0.dylib */; };
 		88537E9D1E4C501900385BCB /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88537E9C1E4C501900385BCB /* main.cpp */; };
 		88DC61451E585CCE0062B914 /* algorithm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88DC61431E585CCE0062B914 /* algorithm.cpp */; };
+		88E08EB61E5ACAD60080D35E /* jsoncpp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88E08EB51E5ACAD60080D35E /* jsoncpp.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -40,11 +41,10 @@
 		88088C191E4E333A00601DBD /* libboost_date_time.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libboost_date_time.dylib; path = ../../../../../usr/local/Cellar/boost/1.63.0/lib/libboost_date_time.dylib; sourceTree = "<group>"; };
 		881280F61E4C8E2000C5BAD8 /* libopencv_video.3.2.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopencv_video.3.2.0.dylib; path = ../../../../../usr/local/lib/libopencv_video.3.2.0.dylib; sourceTree = "<group>"; };
 		881280F71E4C8E2000C5BAD8 /* libopencv_videoio.3.2.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopencv_videoio.3.2.0.dylib; path = ../../../../../usr/local/lib/libopencv_videoio.3.2.0.dylib; sourceTree = "<group>"; };
-		881280FA1E4CADE000C5BAD8 /* utils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = utils.cpp; path = "animeloop-cli/utils.cpp"; sourceTree = "<group>"; };
-		881280FB1E4CADE000C5BAD8 /* utils.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = utils.hpp; path = "animeloop-cli/utils.hpp"; sourceTree = "<group>"; };
 		881281001E4CC93D00C5BAD8 /* libopencv_highgui.3.2.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopencv_highgui.3.2.0.dylib; path = ../../../../../usr/local/lib/libopencv_highgui.3.2.0.dylib; sourceTree = "<group>"; };
 		8812810E1E4DC8EA00C5BAD8 /* loop_video.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = loop_video.cpp; path = "animeloop-cli/loop_video.cpp"; sourceTree = "<group>"; };
 		8812810F1E4DC8EA00C5BAD8 /* loop_video.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = loop_video.hpp; path = "animeloop-cli/loop_video.hpp"; sourceTree = "<group>"; };
+		883E5A5C1E5C346C004E1554 /* libcrypto.1.0.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libcrypto.1.0.0.dylib; path = ../../../../../usr/local/Cellar/openssl/1.0.2j/lib/libcrypto.1.0.0.dylib; sourceTree = "<group>"; };
 		88537E991E4C501900385BCB /* animeloop-cli */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "animeloop-cli"; sourceTree = BUILT_PRODUCTS_DIR; };
 		88537E9C1E4C501900385BCB /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		88537EA71E4C52CC00385BCB /* libopencv_core.3.2.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopencv_core.3.2.0.dylib; path = ../../../../../usr/local/lib/libopencv_core.3.2.0.dylib; sourceTree = "<group>"; };
@@ -52,6 +52,9 @@
 		88537EAC1E4C671F00385BCB /* libopencv_imgproc.3.2.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopencv_imgproc.3.2.0.dylib; path = ../../../../../usr/local/lib/libopencv_imgproc.3.2.0.dylib; sourceTree = "<group>"; };
 		88DC61431E585CCE0062B914 /* algorithm.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = algorithm.cpp; path = "animeloop-cli/algorithm.cpp"; sourceTree = "<group>"; };
 		88DC61441E585CCE0062B914 /* algorithm.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = algorithm.hpp; path = "animeloop-cli/algorithm.hpp"; sourceTree = "<group>"; };
+		88E08EB51E5ACAD60080D35E /* jsoncpp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = jsoncpp.cpp; path = jsoncpp/dist/jsoncpp.cpp; sourceTree = "<group>"; };
+		88E08EB81E5ACB030080D35E /* json-forwards.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "json-forwards.h"; sourceTree = "<group>"; };
+		88E08EB91E5ACB030080D35E /* json.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = json.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -59,6 +62,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				883E5A5D1E5C346C004E1554 /* libcrypto.1.0.0.dylib in Frameworks */,
 				88088C1A1E4E333A00601DBD /* libboost_date_time.dylib in Frameworks */,
 				88088C181E4E29E400601DBD /* libboost_system.dylib in Frameworks */,
 				88088C121E4E294600601DBD /* libopencv_core.3.2.0.dylib in Frameworks */,
@@ -76,8 +80,6 @@
 		88088BF91E4DF6B700601DBD /* loop-video */ = {
 			isa = PBXGroup;
 			children = (
-				881280FA1E4CADE000C5BAD8 /* utils.cpp */,
-				881280FB1E4CADE000C5BAD8 /* utils.hpp */,
 				8812810E1E4DC8EA00C5BAD8 /* loop_video.cpp */,
 				8812810F1E4DC8EA00C5BAD8 /* loop_video.hpp */,
 				88DC61431E585CCE0062B914 /* algorithm.cpp */,
@@ -108,6 +110,7 @@
 				88537E9B1E4C501900385BCB /* animeloop-cli */,
 				88088BF91E4DF6B700601DBD /* loop-video */,
 				88088BFA1E4E1BEF00601DBD /* cxxopts */,
+				88E08E731E5AC9950080D35E /* jsoncpp */,
 				88537E9A1E4C501900385BCB /* Products */,
 				88537EA61E4C52CC00385BCB /* Frameworks */,
 			);
@@ -132,6 +135,7 @@
 		88537EA61E4C52CC00385BCB /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				883E5A5C1E5C346C004E1554 /* libcrypto.1.0.0.dylib */,
 				88088C191E4E333A00601DBD /* libboost_date_time.dylib */,
 				88088C171E4E29E400601DBD /* libboost_system.dylib */,
 				88088C101E4E28B900601DBD /* libboost_filesystem.dylib */,
@@ -143,6 +147,25 @@
 				88537EA71E4C52CC00385BCB /* libopencv_core.3.2.0.dylib */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		88E08E731E5AC9950080D35E /* jsoncpp */ = {
+			isa = PBXGroup;
+			children = (
+				88E08EB71E5ACB030080D35E /* json */,
+				88E08EB51E5ACAD60080D35E /* jsoncpp.cpp */,
+			);
+			name = jsoncpp;
+			sourceTree = "<group>";
+		};
+		88E08EB71E5ACB030080D35E /* json */ = {
+			isa = PBXGroup;
+			children = (
+				88E08EB81E5ACB030080D35E /* json-forwards.h */,
+				88E08EB91E5ACB030080D35E /* json.h */,
+			);
+			name = json;
+			path = jsoncpp/dist/json;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -202,7 +225,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				881280FC1E4CADE000C5BAD8 /* utils.cpp in Sources */,
+				88E08EB61E5ACAD60080D35E /* jsoncpp.cpp in Sources */,
 				88DC61451E585CCE0062B914 /* algorithm.cpp in Sources */,
 				88537E9D1E4C501900385BCB /* main.cpp in Sources */,
 				88010DFF1E52EA6F001CC77B /* loop_video.cpp in Sources */,
@@ -308,6 +331,7 @@
 					/usr/local/lib,
 					/usr/local/Cellar/ffmpeg/3.2.3/lib,
 					/usr/local/Cellar/boost/1.63.0/lib,
+					/usr/local/Cellar/openssl/1.0.2j/lib,
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -323,6 +347,7 @@
 					/usr/local/lib,
 					/usr/local/Cellar/ffmpeg/3.2.3/lib,
 					/usr/local/Cellar/boost/1.63.0/lib,
+					/usr/local/Cellar/openssl/1.0.2j/lib,
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				PRODUCT_NAME = "$(TARGET_NAME)";
