@@ -16,6 +16,9 @@
 		88088C161E4E294600601DBD /* libopencv_videoio.3.2.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 881280F71E4C8E2000C5BAD8 /* libopencv_videoio.3.2.0.dylib */; };
 		88088C181E4E29E400601DBD /* libboost_system.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 88088C171E4E29E400601DBD /* libboost_system.dylib */; };
 		88088C1A1E4E333A00601DBD /* libboost_date_time.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 88088C191E4E333A00601DBD /* libboost_date_time.dylib */; };
+		8818F2EC1E920F260085F368 /* models.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8818F2EA1E920F260085F368 /* models.cpp */; };
+		8818F2EF1E920F3E0085F368 /* utils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8818F2ED1E920F3E0085F368 /* utils.cpp */; };
+		8818F2F51E9242310085F368 /* filter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8818F2F31E9242310085F368 /* filter.cpp */; };
 		883E5A5D1E5C346C004E1554 /* libcrypto.1.0.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 883E5A5C1E5C346C004E1554 /* libcrypto.1.0.0.dylib */; };
 		88537E9D1E4C501900385BCB /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88537E9C1E4C501900385BCB /* main.cpp */; };
 		88DC61451E585CCE0062B914 /* algorithm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88DC61431E585CCE0062B914 /* algorithm.cpp */; };
@@ -44,6 +47,12 @@
 		881281001E4CC93D00C5BAD8 /* libopencv_highgui.3.2.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopencv_highgui.3.2.0.dylib; path = ../../../../../usr/local/lib/libopencv_highgui.3.2.0.dylib; sourceTree = "<group>"; };
 		8812810E1E4DC8EA00C5BAD8 /* loop_video.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = loop_video.cpp; path = "animeloop-cli/loop_video.cpp"; sourceTree = "<group>"; };
 		8812810F1E4DC8EA00C5BAD8 /* loop_video.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = loop_video.hpp; path = "animeloop-cli/loop_video.hpp"; sourceTree = "<group>"; };
+		8818F2EA1E920F260085F368 /* models.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = models.cpp; path = "animeloop-cli/models.cpp"; sourceTree = "<group>"; };
+		8818F2EB1E920F260085F368 /* models.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = models.hpp; path = "animeloop-cli/models.hpp"; sourceTree = "<group>"; };
+		8818F2ED1E920F3E0085F368 /* utils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = utils.cpp; path = "animeloop-cli/utils.cpp"; sourceTree = "<group>"; };
+		8818F2EE1E920F3E0085F368 /* utils.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = utils.hpp; path = "animeloop-cli/utils.hpp"; sourceTree = "<group>"; };
+		8818F2F31E9242310085F368 /* filter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = filter.cpp; path = "animeloop-cli/filter.cpp"; sourceTree = "<group>"; };
+		8818F2F41E9242310085F368 /* filter.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = filter.hpp; path = "animeloop-cli/filter.hpp"; sourceTree = "<group>"; };
 		883E5A5C1E5C346C004E1554 /* libcrypto.1.0.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libcrypto.1.0.0.dylib; path = ../../../../../usr/local/Cellar/openssl/1.0.2j/lib/libcrypto.1.0.0.dylib; sourceTree = "<group>"; };
 		88537E991E4C501900385BCB /* animeloop-cli */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "animeloop-cli"; sourceTree = BUILT_PRODUCTS_DIR; };
 		88537E9C1E4C501900385BCB /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
@@ -52,6 +61,8 @@
 		88537EAC1E4C671F00385BCB /* libopencv_imgproc.3.2.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopencv_imgproc.3.2.0.dylib; path = ../../../../../usr/local/lib/libopencv_imgproc.3.2.0.dylib; sourceTree = "<group>"; };
 		88DC61431E585CCE0062B914 /* algorithm.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = algorithm.cpp; path = "animeloop-cli/algorithm.cpp"; sourceTree = "<group>"; };
 		88DC61441E585CCE0062B914 /* algorithm.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = algorithm.hpp; path = "animeloop-cli/algorithm.hpp"; sourceTree = "<group>"; };
+		88DC91531E7FD737005C122D /* libMagick++-7.Q16HDRI.2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libMagick++-7.Q16HDRI.2.dylib"; path = "../../../../../usr/local/Cellar/imagemagick/7.0.5-3/lib/libMagick++-7.Q16HDRI.2.dylib"; sourceTree = "<group>"; };
+		88DC91551E7FD7BF005C122D /* libMagick++-7.Q16HDRI.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libMagick++-7.Q16HDRI.a"; path = "../../../../../usr/local/Cellar/imagemagick/7.0.5-3/lib/libMagick++-7.Q16HDRI.a"; sourceTree = "<group>"; };
 		88E08EB51E5ACAD60080D35E /* jsoncpp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = jsoncpp.cpp; path = jsoncpp/dist/jsoncpp.cpp; sourceTree = "<group>"; };
 		88E08EB81E5ACB030080D35E /* json-forwards.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "json-forwards.h"; sourceTree = "<group>"; };
 		88E08EB91E5ACB030080D35E /* json.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = json.h; sourceTree = "<group>"; };
@@ -84,6 +95,12 @@
 				8812810F1E4DC8EA00C5BAD8 /* loop_video.hpp */,
 				88DC61431E585CCE0062B914 /* algorithm.cpp */,
 				88DC61441E585CCE0062B914 /* algorithm.hpp */,
+				8818F2F31E9242310085F368 /* filter.cpp */,
+				8818F2F41E9242310085F368 /* filter.hpp */,
+				8818F2ED1E920F3E0085F368 /* utils.cpp */,
+				8818F2EE1E920F3E0085F368 /* utils.hpp */,
+				8818F2EA1E920F260085F368 /* models.cpp */,
+				8818F2EB1E920F260085F368 /* models.hpp */,
 			);
 			name = "loop-video";
 			sourceTree = "<group>";
@@ -135,6 +152,8 @@
 		88537EA61E4C52CC00385BCB /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				88DC91551E7FD7BF005C122D /* libMagick++-7.Q16HDRI.a */,
+				88DC91531E7FD737005C122D /* libMagick++-7.Q16HDRI.2.dylib */,
 				883E5A5C1E5C346C004E1554 /* libcrypto.1.0.0.dylib */,
 				88088C191E4E333A00601DBD /* libboost_date_time.dylib */,
 				88088C171E4E29E400601DBD /* libboost_system.dylib */,
@@ -226,7 +245,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				88E08EB61E5ACAD60080D35E /* jsoncpp.cpp in Sources */,
+				8818F2F51E9242310085F368 /* filter.cpp in Sources */,
+				8818F2EC1E920F260085F368 /* models.cpp in Sources */,
 				88DC61451E585CCE0062B914 /* algorithm.cpp in Sources */,
+				8818F2EF1E920F3E0085F368 /* utils.cpp in Sources */,
 				88537E9D1E4C501900385BCB /* main.cpp in Sources */,
 				88010DFF1E52EA6F001CC77B /* loop_video.cpp in Sources */,
 			);

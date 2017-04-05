@@ -16,7 +16,7 @@ void cvt_image(cv::Mat &image, int length) {
     if(3 == image.channels()) {
         cv::cvtColor(image, image, CV_RGB2GRAY);
     }
-    cv::resize(image, image, cv::Size(length, length));
+//    cv::resize(image, image, cv::Size(length, length));
 }
 
 std::string al::hash(std::string type, cv::Mat image, int length) {
@@ -73,29 +73,23 @@ std::string al::pHash(cv::Mat image, int length) {
 
     double mean = std::accumulate(img.begin<double>(), img.end<double>(), 0.0) / (length * length);
     
-    
     for (int i = 0; i < length; ++i) {
         for (int j = 0; j < length; ++j) {
             hash_string += (img.at<double>(i, j) >= mean ? "1" : "0");
         }
     }
-    
     return hash_string;
 }
 
 
 
 unsigned int al::hamming_distance(std::string str1, std::string str2) {
-    if (str1.empty() || str2.empty()) {
-        return 0;
-    }
+    if (str1.empty() || str2.empty()) { return 0; }
     
     unsigned long len1 = str1.length();
     unsigned long len2 = str2.length();
     
-    if (len1 != len2) {
-        return 0;
-    }
+    if (len1 != len2) { return 0; }
     
     unsigned int dist = 0;
     for (int i = 0; i < len1; ++i) {
@@ -111,6 +105,5 @@ unsigned int al::hamming_distance(int64_t n1, int64_t n2) {
     for (difference = n1 ^ n2; difference; difference >>= 1) {
         count += difference & 1;
     }
-    
     return count;
 }

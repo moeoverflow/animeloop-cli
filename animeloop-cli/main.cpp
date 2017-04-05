@@ -12,7 +12,7 @@
 #include "cxxopts.hpp"
 #include "loop_video.hpp"
 
-const std::string kVersion = "1.1.0";
+const std::string kVersion = "1.2.0";
 
 int main(int argc, char * argv[]) {
 
@@ -32,6 +32,7 @@ int main(int argc, char * argv[]) {
         ("o,output", "Output video directory path", cxxopts::value<std::string>(output)->default_value(rpath.string()))
         ("min-duration", "Minimum duration (second) of loop video", cxxopts::value<double>(min_duration)->default_value("0.8"))
         ("max-duration", "Maximum duration (second) of loop video", cxxopts::value<double>(max_duration)->default_value("4.0"))
+        ("cover", "Output loop video cover image.")
         ;
         
         options.parse(argc, argv);
@@ -46,21 +47,14 @@ int main(int argc, char * argv[]) {
         
         if (options.count("input") && options.count("title")) {
             al::LoopVideo loop_video(title, input, output);
-            loop_video.min_duration = min_duration;
-            loop_video.max_duration = max_duration;
+            loop_video.kMinduration = min_duration;
+            loop_video.kMaxduration = max_duration;
             
-            auto durations = loop_video.find_loop_parts();
+            loop_video.init();
+            loop_video.filter();
+            loop_video.print(loop_video.filtered_durations);
             
-            std::cout << "Total count: " << durations.size() << std::endl;
-            std::cout << "Loop parts of this video:" << std::endl;
-            for (auto it = durations.begin(); it != durations.end(); ++it) {
-                int start_frame = std::get<0>(*it);
-                int end_frame = std::get<1>(*it);
-                double fps = loop_video.fps;
-                std::cout << al::time_string(start_frame / fps) << " ~ " << al::time_string(end_frame / fps) << std::endl;
-            }
-            
-            loop_video.save_loop_parts(durations);
+            loop_video.generate(loop_video.filtered_durations);
         }
         
         
