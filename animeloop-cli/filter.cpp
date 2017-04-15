@@ -44,6 +44,38 @@ void al::filter_0(const LoopVideo * loop, LoopDurations &durations) {
     _durations.erase(end_unique, _durations.end());
     
     durations = _durations;
+    
+    
+    // 这里直接判断循环片段起始帧和终止帧的像素点相同来筛选 temp fix
+    _durations = LoopDurations();
+    
+    VideoCapture capture;
+    capture.open(loop->resized_video_filename.string());
+    
+    for (auto duration : durations) {
+        long begin_frame, end_frame;
+        tie(begin_frame, end_frame) = duration;
+        
+        capture.set(CV_CAP_PROP_POS_FRAMES, begin_frame);
+        Mat begin_image, end_image;
+        capture.read(begin_image);
+        capture.read(end_image);
+        
+        int count = 0;
+        auto length = begin_image.rows * begin_image.cols;
+        for (int i = 0; i < length; i++) {
+            if (begin_image.at<uchar>(i) == end_image.at<uchar>(i)) {
+                count++;
+            }
+        }
+        cout << count << endl;
+        if (count == length) {
+            _durations.push_back(duration);
+        }
+    }
+    capture.release();
+    
+    durations = _durations;    
 }
 
 // filter 1 筛选相近片段相似度高的片段

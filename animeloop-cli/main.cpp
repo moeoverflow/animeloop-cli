@@ -12,8 +12,6 @@
 #include "cxxopts.hpp"
 #include "loop_video.hpp"
 
-const std::string kVersion = "1.2.0";
-
 int main(int argc, char * argv[]) {
 
     auto rpath = boost::filesystem::path(argv[0]).parent_path();
@@ -38,7 +36,7 @@ int main(int argc, char * argv[]) {
         options.parse(argc, argv);
         
         if (options.count("version")) {
-            std::cout << "version: " << kVersion << std::endl;
+            std::cout << "version: " << al::kVersion << std::endl;
         }
         
         if (options.count("help")) {
@@ -49,6 +47,10 @@ int main(int argc, char * argv[]) {
             al::LoopVideo loop_video(title, input, output);
             loop_video.kMinduration = min_duration;
             loop_video.kMaxduration = max_duration;
+            
+            if (options.count("cover")) {
+                loop_video.cover_enabled = true;
+            }
             
             loop_video.init();
             loop_video.filter();

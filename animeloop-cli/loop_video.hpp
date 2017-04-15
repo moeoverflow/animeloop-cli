@@ -15,8 +15,9 @@
 #include <opencv2/opencv.hpp>
 #include <boost/filesystem.hpp>
 
+namespace al {
+    const std::string kVersion = "1.3.0";
 
-namespace al {        
     class LoopVideo {
     public:
         // infomation
@@ -31,10 +32,11 @@ namespace al {
         boost::filesystem::path phash_filename;
         boost::filesystem::path resized_video_filename;
         std::string output_type = "mp4";
+        boost::filesystem::path face_cascade_filename;
         
         // Effect the final results.
-        double kMinduration = 0.8;
-        double kMaxduration = 4;
+        double kMinduration = 0.6;
+        double kMaxduration = 6;
         int kResizedHeight = 32;
         int kResizedWidth = 32;
         double kVarience = 1.0;
@@ -47,6 +49,7 @@ namespace al {
         LoopDurations filtered_durations;
         
         LoopVideo(std::string title, std::string input, std::string output);
+        cv::CascadeClassifier face_cascade;
         
         void init();
         void filter();

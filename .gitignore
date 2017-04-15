@@ -4,6 +4,9 @@
 *.o
 *.obj
 
+# IntelliJ IDEA
+.idea
+
 # Precompiled Headers
 *.gch
 *.pch

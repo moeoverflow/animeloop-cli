@@ -53,7 +53,9 @@ void al::resize_video(string file, string output, Size size) {
         capture.open(file);
         
         VideoInfo info = get_info(capture);
-        cv::VideoWriter writer(output, info.fourcc, info.fps, size);
+
+        VideoWriter writer(output, CV_FOURCC('H', '2', '6', '4'), info.fps, size);
+
         
         int percent = 0;
         int count = 0, total = info.frame_count;

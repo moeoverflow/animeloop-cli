@@ -8,19 +8,26 @@
 
 #include "algorithm.hpp"
 
+#include <opencv2/objdetect/objdetect.hpp>
 #include <vector>
 #include <iomanip>
 #include <numeric>
+#include <string>
+
+using namespace std;
+using namespace cv;
 
 void cvt_image(cv::Mat &image, int length) {
     if(3 == image.channels()) {
-        cv::cvtColor(image, image, CV_RGB2GRAY);
+        cvtColor(image, image, CV_RGB2GRAY);
     }
-//    cv::resize(image, image, cv::Size(length, length));
+    if (length != 0) {
+        resize(image, image, Size(length, length));
+    }
 }
 
-std::string al::hash(std::string type, cv::Mat image, int length) {
-    std::transform(type.begin(), type.end(), type.begin(), tolower);
+string al::hash(string type, Mat image, int length) {
+    transform(type.begin(), type.end(), type.begin(), [](unsigned char c) { return std::tolower(c); });
     if (type == "ahash") {
         return al::aHash(image, length);
     } else if (type == "dhash") {
@@ -28,14 +35,14 @@ std::string al::hash(std::string type, cv::Mat image, int length) {
     } else if (type == "phash") {
         return al::pHash(image, length);
     } else {
-        return std::string();
+        return string();
     }
 }
 
-std::string al::aHash(cv::Mat image, int length) {
+string al::aHash(Mat image, int length) {
     cvt_image(image, length);
     
-    int sum = std::accumulate(image.begin<uchar>(), image.end<uchar>(), 0.00);
+    int sum = accumulate(image.begin<uchar>(), image.end<uchar>(), 0.00);
     int average = sum / image.cols / image.rows;
     
     std::string hash_string = "";
@@ -48,10 +55,10 @@ std::string al::aHash(cv::Mat image, int length) {
 }
 
 
-std::string al::dHash(cv::Mat image, int length) {
+string al::dHash(Mat image, int length) {
     cvt_image(image, length);
     
-    std::string hash_string = "";
+    string hash_string = "";
     for (int row = 0; row < length; ++row) {
         int row_start_index = row * length;
         for (int col = 0; col < length-1; ++col) {
@@ -63,15 +70,15 @@ std::string al::dHash(cv::Mat image, int length) {
     return hash_string;
 }
 
-std::string al::pHash(cv::Mat image, int length) {
+string al::pHash(Mat image, int length) {
     cvt_image(image, length);
 
-    cv::Mat img = cv::Mat_<double>(image);
-    cv::dct(img, img);
+    Mat img = Mat_<double>(image);
+    dct(img, img);
     
-    std::string hash_string = "";
+    string hash_string = "";
 
-    double mean = std::accumulate(img.begin<double>(), img.end<double>(), 0.0) / (length * length);
+    double mean = accumulate(img.begin<double>(), img.end<double>(), 0.0) / (length * length);
     
     for (int i = 0; i < length; ++i) {
         for (int j = 0; j < length; ++j) {
@@ -82,8 +89,7 @@ std::string al::pHash(cv::Mat image, int length) {
 }
 
 
-
-unsigned int al::hamming_distance(std::string str1, std::string str2) {
+unsigned int al::hamming_distance(string str1, string str2) {
     if (str1.empty() || str2.empty()) { return 0; }
     
     unsigned long len1 = str1.length();
@@ -106,4 +112,14 @@ unsigned int al::hamming_distance(int64_t n1, int64_t n2) {
         count += difference & 1;
     }
     return count;
+}
+
+vector<Rect> detect_face(Mat image, CascadeClassifier &face_cascade) {
+    vector<Rect> faces;
+    
+    cvt_image(image, 0);
+    cv::equalizeHist(image, image);
+
+    face_cascade.detectMultiScale(image, faces);
+    return faces;
 }
