@@ -76,7 +76,20 @@ void al::resize_video(string file, string output, Size size) {
     }
 }
 
-
+bool al::get_frames(string file, FrameVector &frames) {
+    FrameVector _frames;
+    VideoCapture capture;
+    capture.open(file);
+    
+    cv::Mat image;
+    while (capture.read(image)) {
+        _frames.push_back(image);
+    }
+    capture.release();
+    frames = _frames;
+    
+    return true;
+}
 
 bool al::get_hash_strings(string file, string type, HashVector &hash_strings, string hash_file) {
     

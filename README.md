@@ -1,6 +1,23 @@
 # animeloop-cli
 Anime loop video command line tool.
 
+### Installation
+
+#### Git Submodules Init
+
+```Shell
+$ git submodule init
+$ git submodule update
+```
+
+#### macOS 
+
+Just run in Xcode.
+
+#### Cross-Platform
+
+CMake is not available currently.
+
 ## Usage
 
 ```Shell

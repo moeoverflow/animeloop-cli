@@ -53,6 +53,7 @@ al::LoopVideo::LoopVideo(std::string title, std::string input, std::string outpu
 
 void al::LoopVideo::init() {
     resize_video(this->input_path.string(), this->resized_video_filename.string(), cv::Size(this->kResizedWidth, this->kResizedHeight));
+    get_frames(this->resized_video_filename.string(), this->frames);
     get_hash_strings(this->resized_video_filename.string(), "dHash", this->dhash_strings, this->dhash_filename.string());
     get_hash_strings(this->resized_video_filename.string(), "pHash", this->phash_strings, this->phash_filename.string());
     this->info = get_info(this->resized_video_filename.string());

@@ -16,6 +16,7 @@ namespace al {
     typedef std::tuple<long, long> LoopDuration;
     typedef std::vector<LoopDuration> LoopDurations;
     typedef std::vector<std::string> HashVector;
+    typedef std::vector<cv::Mat> FrameVector;
         
     struct VideoInfo {
         double fps;

@@ -22,6 +22,8 @@ namespace al {
     
     void resize_video(std::string file, std::string output, cv::Size size);
 
+    bool get_frames(std::string file, FrameVector &frames);
+
     bool get_hash_strings(std::string file, std::string type, al::HashVector &hash_strings, std::string hash_file);
     
     double get_variance(std::vector<int> distances);

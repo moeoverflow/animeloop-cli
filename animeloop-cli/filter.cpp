@@ -45,21 +45,14 @@ void al::filter_0(const LoopVideo * loop, LoopDurations &durations) {
     
     durations = _durations;
     
-    
     // 这里直接判断循环片段起始帧和终止帧的像素点相同来筛选 temp fix
     _durations = LoopDurations();
-    
-    VideoCapture capture;
-    capture.open(loop->resized_video_filename.string());
     
     for (auto duration : durations) {
         long begin_frame, end_frame;
         tie(begin_frame, end_frame) = duration;
-        
-        capture.set(CV_CAP_PROP_POS_FRAMES, begin_frame);
-        Mat begin_image, end_image;
-        capture.read(begin_image);
-        capture.read(end_image);
+        Mat begin_image = loop->frames.at(begin_frame);
+        Mat end_image = loop->frames.at(begin_frame);
         
         int count = 0;
         auto length = begin_image.rows * begin_image.cols;
@@ -68,12 +61,10 @@ void al::filter_0(const LoopVideo * loop, LoopDurations &durations) {
                 count++;
             }
         }
-        cout << count << endl;
         if (count == length) {
             _durations.push_back(duration);
         }
     }
-    capture.release();
     
     durations = _durations;    
 }
@@ -92,8 +83,8 @@ void al::filter_1(const al::LoopVideo * loop, LoopDurations &durations) {
         int distance_begin = hamming_distance(hashs[prev_begin], hashs[next_begin]);
         int distance_end = hamming_distance(hashs[prev_end], hashs[next_end]);
 
-        const int magic_numebr = 20;
-        if (distance_begin >= magic_numebr && distance_end >= magic_numebr) {
+        const int magic_number = 20;
+        if (distance_begin >= magic_number && distance_end >= magic_number) {
             _durations.push_back(*it);
         }
     }
@@ -101,7 +92,7 @@ void al::filter_1(const al::LoopVideo * loop, LoopDurations &durations) {
 }
 
 // filter 2 筛选临近帧像素变化小的片段
-// MAGIC NUMBER ===> if (variance > 1.5) {
+// MAGIC NUMBER ===> if (variance > 1.0) {
 void al::filter_2(const al::LoopVideo * loop, al::LoopDurations &durations) {
     LoopDurations _durations;
     auto hashs = loop->phash_strings;
@@ -117,7 +108,7 @@ void al::filter_2(const al::LoopVideo * loop, al::LoopDurations &durations) {
         }
         
         double variance = get_variance(distances);
-        const double magic_number = 1.5;
+        const double magic_number = 1.0;
         if (variance > magic_number) {
             _durations.push_back(*it);
         }

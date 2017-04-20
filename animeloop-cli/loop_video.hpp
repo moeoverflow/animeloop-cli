@@ -47,6 +47,7 @@ namespace al {
         HashVector phash_strings;
         LoopDurations durations;
         LoopDurations filtered_durations;
+        FrameVector frames;
         
         LoopVideo(std::string title, std::string input, std::string output);
         cv::CascadeClassifier face_cascade;
