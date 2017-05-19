@@ -12,39 +12,52 @@
 #include "cxxopts.hpp"
 #include "loop_video.hpp"
 
+using namespace std;
+using namespace boost::filesystem;
+using namespace cxxopts;
+
 int main(int argc, char * argv[]) {
 
-    auto rpath = boost::filesystem::path(argv[0]).parent_path();
+    auto rpath = path(argv[0]).parent_path();
     double min_duration, max_duration;
     
     try {
         cxxopts::Options options("animeloop", "anime loop video generator.");
 
-        std::string input, output, title;
+        string input, output, episode, series;
         
         options.add_options()
         ("h,help", "Show animeloop help")
         ("v,version", "Show animeloop version")
-        ("title", "Title of the source video", cxxopts::value<std::string>(title))
-        ("i,input", "Input video file path", cxxopts::value<std::string>(input))
-        ("o,output", "Output video directory path", cxxopts::value<std::string>(output)->default_value(rpath.string()))
-        ("min-duration", "Minimum duration (second) of loop video", cxxopts::value<double>(min_duration)->default_value("0.8"))
-        ("max-duration", "Maximum duration (second) of loop video", cxxopts::value<double>(max_duration)->default_value("4.0"))
+        ("i,input", "Input video file path", value<string>(input))
+        ("o,output", "Output video directory path", value<string>(output)->default_value(rpath.string()))
+        ("episode", "Episode name of the source video (default: <filename>)", value<string>(episode))
+        ("series", "Series name of the source video  (default: <filename>)", value<string>(series))
+        ("min-duration", "Minimum duration (second) of loop video", value<double>(min_duration)->default_value("0.8"))
+        ("max-duration", "Maximum duration (second) of loop video", value<double>(max_duration)->default_value("4.0"))
         ("cover", "Output loop video cover image.")
         ;
         
         options.parse(argc, argv);
         
         if (options.count("version")) {
-            std::cout << "version: " << al::kVersion << std::endl;
+            cout << "version: " << al::kVersion << endl;
         }
         
         if (options.count("help")) {
-            std::cout << options.help() << std::endl;
+            cout << options.help() << endl;
         }
         
-        if (options.count("input") && options.count("title")) {
-            al::LoopVideo loop_video(title, input, output);
+        if (options.count("input")) {
+            if (episode == "") {
+                episode = path(input).stem().string();
+            }
+
+            if (series == "") {
+                series = path(input).stem().string();
+            }
+            
+            al::LoopVideo loop_video(series, episode, input, output);
             loop_video.kMinduration = min_duration;
             loop_video.kMaxduration = max_duration;
             
@@ -60,8 +73,8 @@ int main(int argc, char * argv[]) {
         }
         
         
-    } catch (const cxxopts::OptionException& e) {
-        std::cout << "error parsing options: " << e.what() << std::endl;
+    } catch (const OptionException& e) {
+        cout << "error parsing options: " << e.what() << endl;
         exit(1);
     }
 

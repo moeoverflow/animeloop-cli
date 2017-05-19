@@ -23,11 +23,12 @@ using namespace cv;
 using namespace al;
 
 
-al::LoopVideo::LoopVideo(std::string title, std::string input, std::string output) {
+al::LoopVideo::LoopVideo(std::string series, std::string episode, std::string input, std::string output) {
 
     this->md5 = al::md5_of_file(input);
 
-    this->title = title;
+    this->series = series;
+    this->episode = episode;
 
     this->filename = path(input).stem().string();
 
@@ -90,7 +91,9 @@ void al::LoopVideo::generate(const LoopDurations durations) {
     VideoInfo info = get_info(this->input_path.string());
     
     Json::Value videos_json;
-    videos_json["title"] = this->title;
+    videos_json["series"] = this->series;
+    videos_json["episode"] = this->episode;
+
     videos_json["animeloop_ver"] = kVersion;
     
     Json::Value source_json;
@@ -146,20 +149,22 @@ void al::LoopVideo::generate(const LoopDurations durations) {
         // Save video info json file.
         Json::Value video_json;
         
-        video_json["video_filename"] = video_filename;
-        video_json["cover_filename"] = cover_filename;
+        Json::Value files_json;
+        files_json["mp4_1080p"] = video_filename;
+        files_json["jpg_1080p"] = cover_filename;
+        video_json["files"] = files_json;
         
         video_json["duration"] = video_duration;
         
         Json::Value frame_json;
-        frame_json["start"] = to_string(start_frame);
+        frame_json["begin"] = to_string(start_frame);
         frame_json["end"] = to_string(end_frame);
         video_json["frame"] = frame_json;
         
-        Json::Value time_json;
-        time_json["start"] = al::time_string(start_frame / info.fps);
-        time_json["end"] = al::time_string(end_frame / info.fps);
-        video_json["time"] = time_json;
+        Json::Value period_json;
+        period_json["begin"] = al::time_string(start_frame / info.fps);
+        period_json["end"] = al::time_string(end_frame / info.fps);
+        video_json["period"] = period_json;
         
         auto md5 = al::md5_of_file(video_filepath);
         video_json["md5"] = md5;

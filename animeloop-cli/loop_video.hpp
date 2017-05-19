@@ -16,13 +16,14 @@
 #include <boost/filesystem.hpp>
 
 namespace al {
-    const std::string kVersion = "1.3.0";
+    const std::string kVersion = "1.3.1";
 
     class LoopVideo {
     public:
         // infomation
         std::string filename;
-        std::string title;
+        std::string series;
+        std::string episode;
         
         // I/O path
         boost::filesystem::path input_path;
@@ -49,7 +50,7 @@ namespace al {
         LoopDurations filtered_durations;
         FrameVector frames;
         
-        LoopVideo(std::string title, std::string input, std::string output);
+        LoopVideo(std::string series, std::string episode, std::string input, std::string output);
         cv::CascadeClassifier face_cascade;
         
         void init();
