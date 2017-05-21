@@ -54,6 +54,9 @@ sudo apt-get remove opencv
 
 # Boost
 sudo apt-get install libboost-all-dev
+
+# OpenSSL
+sudo apt-get install libssl-dev
 ```
 
 #### Compile & Build 
@@ -68,6 +71,9 @@ Open `animeloop-cli.xcodeproj` and run it.
 
 ``` Shell
 cd animeloop-cli
+cd jsoncpp
+python amalgamate.py
+cd ..
 mkdir build
 cd build
 cmake ..
