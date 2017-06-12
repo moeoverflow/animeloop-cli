@@ -48,8 +48,8 @@ al::LoopVideo::LoopVideo(std::string series, std::string episode, std::string in
         create_directories(this->caches_path);
     }
     
-    this->face_cascade_filename = "./lbpcascade_animeface.xml";
-    face_cascade.load(this->face_cascade_filename.string());
+//    this->face_cascade_filename = "./lbpcascade_animeface.xml";
+//    face_cascade.load(this->face_cascade_filename.string());
 }
 
 void al::LoopVideo::init() {
@@ -85,7 +85,6 @@ void al::LoopVideo::print(LoopDurations durations) {
         std::cout << al::time_string(start_frame / info.fps) << " ~ " << al::time_string(end_frame / info.fps) << std::endl;
     }
 }
-
 
 void al::LoopVideo::generate(const LoopDurations durations) {
     VideoInfo info = get_info(this->input_path.string());

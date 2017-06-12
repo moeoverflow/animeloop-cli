@@ -18,7 +18,13 @@ using namespace std;
 using namespace cv;
 
 
-// filter 0 找出所有起始帧和结束帧相同的片段，并去重
+/**
+ filter 0 
+ Find all loop fragments that the begin frame is same as end one, then remove the repetition.
+
+ @param loop LoopVideo instance
+ @param durations reference of durations value
+ */
 void al::filter_0(const LoopVideo * loop, LoopDurations &durations) {
     LoopDurations _durations;
     int min_duration_frame = loop->kMinduration * loop->info.fps;
@@ -69,8 +75,15 @@ void al::filter_0(const LoopVideo * loop, LoopDurations &durations) {
     durations = _durations;    
 }
 
-// filter 1 筛选相近片段相似度高的片段
-// MAGIC NUMBER ===> if (distance_begin >= 25 && distance_end >= 25) {
+/**
+ filter 1
+ find the loop fragments that is same as nearby one, then remove it.
+ 
+ MAGIC NUMBER ===> if (distance_begin >= 25 && distance_end >= 25) {
+
+ @param loop LoopVideo instance
+ @param durations reference of durations value
+ */
 void al::filter_1(const al::LoopVideo * loop, LoopDurations &durations) {
     LoopDurations _durations;
     auto hashs = loop->phash_strings;
@@ -91,8 +104,15 @@ void al::filter_1(const al::LoopVideo * loop, LoopDurations &durations) {
     durations = _durations;
 }
 
-// filter 2 筛选临近帧像素变化小的片段
-// MAGIC NUMBER ===> if (variance > 1.0) {
+/**
+ filter 2
+ find the loop fragments with a small frame pixels change.
+ 
+ MAGIC NUMBER ===> if (variance > 1.0) {
+ 
+ @param loop LoopVideo instance
+ @param durations reference of durations value
+ */
 void al::filter_2(const al::LoopVideo * loop, al::LoopDurations &durations) {
     LoopDurations _durations;
     auto hashs = loop->phash_strings;
@@ -116,7 +136,13 @@ void al::filter_2(const al::LoopVideo * loop, al::LoopDurations &durations) {
     durations = _durations;
 }
 
-// filter 3 筛选起始或者结束帧为黑色或白色的片段
+/**
+ filter 3
+ find the loop fragments that the color of begin/end frame is most black or white, then remove it.
+ 
+ @param loop LoopVideo instance
+ @param durations reference of durations value
+ */
 void al::filter_3(const al::LoopVideo * loop, al::LoopDurations &durations) {
     LoopDurations _durations;
     

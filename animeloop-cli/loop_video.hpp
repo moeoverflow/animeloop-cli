@@ -33,7 +33,7 @@ namespace al {
         boost::filesystem::path phash_filename;
         boost::filesystem::path resized_video_filename;
         std::string output_type = "mp4";
-        boost::filesystem::path face_cascade_filename;
+//        boost::filesystem::path face_cascade_filename;
         
         // Effect the final results.
         double kMinduration = 0.6;
@@ -50,13 +50,39 @@ namespace al {
         LoopDurations filtered_durations;
         FrameVector frames;
         
+        /**
+         Class LoopVideo constructor.
+         
+         @param series series title
+         @param episode episode title
+         @param input input file path
+         @param output output file path
+         */
         LoopVideo(std::string series, std::string episode, std::string input, std::string output);
-        cv::CascadeClassifier face_cascade;
+//        cv::CascadeClassifier face_cascade;
         
+        /**
+         Initial resized video file, pHash and dHash file for cache.
+         */
         void init();
+        
+        /**
+         Animeloop algorithm filter workflow.
+         */
         void filter();
+        
+        /**
+         Print durations data.
+         
+         @param durations durations data
+         */
         void print(LoopDurations durations);
         
+        /**
+         Generate loop video files from durations data.
+         
+         @param durations durations data
+         */
         void generate(const al::LoopDurations filtered_durations);
 
     private:
