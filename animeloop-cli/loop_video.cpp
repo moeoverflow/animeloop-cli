@@ -12,10 +12,7 @@
 #include "filter.hpp"
 
 #include "json.h"
-#include <boost/filesystem.hpp>
-#include <locale>
-#include <numeric>
-#include <string>
+#include <sys/wait.h>
 
 using namespace std;
 using namespace boost::filesystem;
@@ -47,13 +44,10 @@ al::LoopVideo::LoopVideo(std::string series, std::string episode, std::string in
     if (!exists(this->caches_path)) {
         create_directories(this->caches_path);
     }
-    
-//    this->face_cascade_filename = "./lbpcascade_animeface.xml";
-//    face_cascade.load(this->face_cascade_filename.string());
 }
 
 void al::LoopVideo::init() {
-    resize_video(this->input_path.string(), this->resized_video_filename.string(), cv::Size(this->kResizedWidth, this->kResizedHeight));
+    resize_video(this->input_path, this->resized_video_filename, cv::Size(this->kResizedWidth, this->kResizedHeight));
     get_frames(this->resized_video_filename.string(), this->frames);
     get_hash_strings(this->resized_video_filename.string(), "dHash", this->dhash_strings, this->dhash_filename.string());
     get_hash_strings(this->resized_video_filename.string(), "pHash", this->phash_strings, this->phash_filename.string());
@@ -84,6 +78,18 @@ void al::LoopVideo::print(LoopDurations durations) {
         
         std::cout << al::time_string(start_frame / info.fps) << " ~ " << al::time_string(end_frame / info.fps) << std::endl;
     }
+}
+
+int fork_gen_cover(string video_filepath, string cover_filepath) {
+    int pid = fork();
+    if(pid != 0) {
+        /* We're in the parent process, return the child's pid. */
+        return pid;
+    }
+    /* Otherwise, we're in the child process, so let's exec curl. */
+    execlp("ffmpeg", "ffmpeg", "-loglevel", "panic", "-i", video_filepath.c_str(), "-vframes", "1", "-f", "image2", cover_filepath.c_str(), NULL);
+
+    exit(100);
 }
 
 void al::LoopVideo::generate(const LoopDurations durations) {
@@ -124,27 +130,37 @@ void al::LoopVideo::generate(const LoopDurations durations) {
             cv::Mat image;
             long frame = start_frame;
             while (capture.read(image)) {
-                if (cover_enabled && frame == start_frame) {
-                    cv::imwrite(cover_filepath, image);
-                } else if (frame > end_frame) {
+                // Exclude the last frame.
+                if (frame >= end_frame) {
                     break;
                 }
-                
+
                 writer.write(image);
                 frame++;
             }
             writer.release();
         }
-        
-        if (cover_enabled && !exists(cover_filepath)) {
-            capture.set(CV_CAP_PROP_POS_FRAMES, start_frame);
-            cv::Mat image;
-            capture.read(image);
-            cv::imwrite(cover_filepath, image);
-        }
         capture.release();
 
-        
+        if (cover_enabled && !exists(cover_filepath)) {
+            int cpid = fork_gen_cover(video_filepath, cover_filepath);
+            if(cpid == -1) {
+                /* Failed to fork */
+                cerr << "Fork failed" << endl;
+                throw;
+            }
+
+            /* Optionally, wait for the child to exit and get
+               the exit status. */
+            int status;
+            waitpid(cpid, &status, 0);
+            if(! WIFEXITED(status)) {
+                cerr << "The child was killed or segfaulted or something." << endl;
+            }
+
+            status = WEXITSTATUS(status);
+        }
+
         // Save video info json file.
         Json::Value video_json;
         

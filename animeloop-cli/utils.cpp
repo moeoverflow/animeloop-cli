@@ -12,11 +12,11 @@
 #include "json.h"
 #include <boost/filesystem.hpp>
 #include <boost/date_time/posix_time/posix_time.hpp>
-#include <boost/date_time/posix_time/posix_time_io.hpp>
-#include <locale>
+#include <boost/regex.hpp>
 #include <openssl/md5.h>
-#include <fstream>
 #include <numeric>
+#include <sys/wait.h>
+
 
 using namespace std;
 using namespace boost::filesystem;
@@ -42,37 +42,85 @@ VideoInfo al::get_info(std::string filename) {
 }
 
 
+int fork_resize_video(path input, path temp_filename, Size size) {
+    int pid = fork();
+    if(pid != 0) {
+        /* We're in the parent process, return the child's pid. */
+        return pid;
+    }
+    /* Otherwise, we're in the child process, so let's exec curl. */
+    execlp("ffmpeg", "ffmpeg", "-loglevel", "panic", "-i", input.string().c_str(), "-s", (to_string(size.width) + "x" + to_string(size.height)).c_str(), "-an", temp_filename.string().c_str(), NULL);
 
-void al::resize_video(string file, string output, Size size) {
+    exit(100);
+}
+
+void al::resize_video(path input, path output, Size size) {
+    path temp_output = output.parent_path().append("temp");
+    path temp_filename = path(temp_output).append(output.filename().string());
+    if (!exists(temp_output)) {
+        create_directories(temp_output);
+    } else {
+        if (exists(temp_filename)) {
+            remove(temp_filename);
+        }
+    }
+
     auto if_exists = exists(output);
     
     if (!if_exists) {
-        // Calculate hash string per frame.
-        std::cout << "Resizing video... 0%" << std::endl;
-        VideoCapture capture;
-        capture.open(file);
-        
-        VideoInfo info = get_info(capture);
+        if (system("which ffmpeg") == 0) {
+            cout << "Resizing video..." << endl;
 
-        VideoWriter writer(output, CV_FOURCC('H', '2', '6', '4'), info.fps, size);
-
-        
-        int percent = 0;
-        int count = 0, total = info.frame_count;
-        cv::Mat image;
-        while (capture.read(image)) {
-            if (count / double(total) * 100 > percent) {
-                percent++;
-                std::cout << "Resizing video... " << percent << "%" << std::endl;
+            int cpid = fork_resize_video(input, temp_filename, size);
+            if(cpid == -1) {
+                /* Failed to fork */
+                cerr << "Fork failed" << endl;
+                throw;
             }
-            cv::resize(image, image, size);
-            writer.write(image);
-            image.release();
-            count++;
+
+            /* Optionally, wait for the child to exit and get
+               the exit status. */
+            int status;
+            waitpid(cpid, &status, 0);
+            if(! WIFEXITED(status)) {
+                cerr << "The child was killed or segfaulted or something\n" << endl;
+            }
+
+            status = WEXITSTATUS(status);
+
+
+            cout << "done." << endl;
+
+        } else {
+            // Calculate hash string per frame.
+            cout << "Resizing video... 0%" << endl;
+            VideoCapture capture;
+            capture.open(input.string());
+
+            VideoInfo info = get_info(capture);
+
+            VideoWriter writer(temp_filename.string(), CV_FOURCC('H', '2', '6', '4'), info.fps, size);
+
+
+            int percent = 0;
+            int count = 0, total = info.frame_count;
+            cv::Mat image;
+            while (capture.read(image)) {
+                if (count / double(total) * 100 > percent) {
+                    percent++;
+                    std::cout << "Resizing video... " << percent << "%" << std::endl;
+                }
+                cv::resize(image, image, size);
+                writer.write(image);
+                image.release();
+                count++;
+            }
+
+            writer.release();
+            capture.release();
         }
-        
-        writer.release();
-        capture.release();
+
+        system(("mv " + temp_filename.string() + " " + output.string()).c_str());
     }
 }
 
@@ -91,19 +139,27 @@ bool al::get_frames(string file, FrameVector &frames) {
     return true;
 }
 
-bool al::get_hash_strings(string file, string type, HashVector &hash_strings, string hash_file) {
-    
+void al::get_hash_strings(path filename, string type, HashVector &hash_strings, path hash_file) {
+    path temp_path = hash_file.parent_path().append("temp");
+    path temp_filename = path(temp_path).append(hash_file.filename().string());
+
+    if (!exists(temp_path)) {
+        create_directories(temp_path);
+    } else {
+        if (exists(temp_filename)) {
+            remove(temp_filename);
+        }
+    }
+
     auto if_exists = exists(hash_file);
     VideoCapture capture;
     if (if_exists) {
         // Read video frames hash string from file.
         std::cout << "Restore " << type << " value from file..." << std::endl;
         
-        std::ifstream input_file(hash_file);
+        std::ifstream input_file(hash_file.string());
         HashVector hashs;
-        
-        int count;
-        count = 0;
+
         while (input_file) {
             string line;
             getline(input_file, line);
@@ -112,15 +168,13 @@ bool al::get_hash_strings(string file, string type, HashVector &hash_strings, st
         input_file.close();
         
         hash_strings = hashs;
-        return true;
     } else {
         // Calculate hash string per frame.
         VideoCapture capture;
-        capture.open(file);
+        capture.open(filename.string());
         VideoInfo info = get_info(capture);
         HashVector hashs;
-        
-        
+
         cout << "Calculating " << type << " value... 0%" << endl;
         int percent = 0;
         int count = 0, total = info.frame_count;
@@ -139,13 +193,13 @@ bool al::get_hash_strings(string file, string type, HashVector &hash_strings, st
         hash_strings = hashs;
         
         cout << "Save " << type << " value into file..." << endl;
-        std::ofstream output_file(hash_file);
+        std::ofstream output_file(temp_filename.string());
         ostream_iterator<string> output_iterator(output_file, "\n");
         std::copy(hashs.begin(), hashs.end(), output_iterator);
         output_file.close();
-        return true;
+
+        system(("mv " + temp_filename.string() + " " + hash_file.string()).c_str());
     }
-    return false;
 }
 
 

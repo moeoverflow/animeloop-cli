@@ -16,7 +16,7 @@
 #include <boost/filesystem.hpp>
 
 namespace al {
-    const std::string kVersion = "1.3.1";
+    const std::string kVersion = "1.3.2";
 
     class LoopVideo {
     public:

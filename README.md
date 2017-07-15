@@ -24,6 +24,9 @@ brew install opencv3 --with-contrib --with-ffmpeg --c++11
 
 # Boost
 brew install boost
+
+# FFmpeg
+brew install ffmpeg
 ```
 
 ##### Linux
@@ -57,6 +60,11 @@ sudo apt-get install libboost-all-dev
 
 # OpenSSL
 sudo apt-get install libssl-dev
+
+# FFmpeg
+# unofficial ppa
+sudo add-apt-repository ppa:jonathonf/ffmpeg-3
+sudo apt update && sudo apt install ffmpeg
 ```
 
 #### Compile & Build 
