@@ -19,9 +19,8 @@
 		8818F2EC1E920F260085F368 /* models.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8818F2EA1E920F260085F368 /* models.cpp */; };
 		8818F2EF1E920F3E0085F368 /* utils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8818F2ED1E920F3E0085F368 /* utils.cpp */; };
 		8818F2F51E9242310085F368 /* filter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8818F2F31E9242310085F368 /* filter.cpp */; };
-		883E5A5D1E5C346C004E1554 /* libcrypto.1.0.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 883E5A5C1E5C346C004E1554 /* libcrypto.1.0.0.dylib */; };
+		884E2E261F30D787001EA03E /* libcrypto.1.0.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 884E2E241F30D769001EA03E /* libcrypto.1.0.0.dylib */; };
 		88537E9D1E4C501900385BCB /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88537E9C1E4C501900385BCB /* main.cpp */; };
-		889337CD1E9E31AE004C69AD /* libopencv_objdetect.3.2.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 889337CC1E9E31AE004C69AD /* libopencv_objdetect.3.2.0.dylib */; };
 		88DC61451E585CCE0062B914 /* algorithm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88DC61431E585CCE0062B914 /* algorithm.cpp */; };
 		88E08EB61E5ACAD60080D35E /* jsoncpp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88E08EB51E5ACAD60080D35E /* jsoncpp.cpp */; };
 /* End PBXBuildFile section */
@@ -55,6 +54,7 @@
 		8818F2F31E9242310085F368 /* filter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = filter.cpp; path = "animeloop-cli/filter.cpp"; sourceTree = "<group>"; };
 		8818F2F41E9242310085F368 /* filter.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = filter.hpp; path = "animeloop-cli/filter.hpp"; sourceTree = "<group>"; };
 		883E5A5C1E5C346C004E1554 /* libcrypto.1.0.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libcrypto.1.0.0.dylib; path = ../../../../../usr/local/Cellar/openssl/1.0.2j/lib/libcrypto.1.0.0.dylib; sourceTree = "<group>"; };
+		884E2E241F30D769001EA03E /* libcrypto.1.0.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libcrypto.1.0.0.dylib; path = ../../../../../usr/local/Cellar/openssl/1.0.2l/lib/libcrypto.1.0.0.dylib; sourceTree = "<group>"; };
 		88537E991E4C501900385BCB /* animeloop-cli */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "animeloop-cli"; sourceTree = BUILT_PRODUCTS_DIR; };
 		88537E9C1E4C501900385BCB /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		88537EA71E4C52CC00385BCB /* libopencv_core.3.2.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopencv_core.3.2.0.dylib; path = ../../../../../usr/local/lib/libopencv_core.3.2.0.dylib; sourceTree = "<group>"; };
@@ -76,8 +76,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				889337CD1E9E31AE004C69AD /* libopencv_objdetect.3.2.0.dylib in Frameworks */,
-				883E5A5D1E5C346C004E1554 /* libcrypto.1.0.0.dylib in Frameworks */,
+				884E2E261F30D787001EA03E /* libcrypto.1.0.0.dylib in Frameworks */,
 				88088C1A1E4E333A00601DBD /* libboost_date_time.dylib in Frameworks */,
 				88088C181E4E29E400601DBD /* libboost_system.dylib in Frameworks */,
 				88088C121E4E294600601DBD /* libopencv_core.3.2.0.dylib in Frameworks */,
@@ -156,6 +155,7 @@
 		88537EA61E4C52CC00385BCB /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				884E2E241F30D769001EA03E /* libcrypto.1.0.0.dylib */,
 				889337CC1E9E31AE004C69AD /* libopencv_objdetect.3.2.0.dylib */,
 				889337CA1E9E318C004C69AD /* libopencv_face.3.2.0.dylib */,
 				88DC91551E7FD7BF005C122D /* libMagick++-7.Q16HDRI.a */,
@@ -373,6 +373,7 @@
 					/usr/local/Cellar/ffmpeg/3.2.3/lib,
 					/usr/local/Cellar/boost/1.63.0/lib,
 					/usr/local/Cellar/openssl/1.0.2j/lib,
+					/usr/local/Cellar/openssl/1.0.2l/lib,
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -390,6 +391,7 @@
 					/usr/local/Cellar/ffmpeg/3.2.3/lib,
 					/usr/local/Cellar/boost/1.63.0/lib,
 					/usr/local/Cellar/openssl/1.0.2j/lib,
+					/usr/local/Cellar/openssl/1.0.2l/lib,
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				PRODUCT_NAME = "$(TARGET_NAME)";

@@ -24,17 +24,16 @@ int main(int argc, char * argv[]) {
     try {
         cxxopts::Options options("animeloop", "anime loop video generator.");
 
-        string input, output, episode, series;
+        string input, output, title;
         
         options.add_options()
         ("h,help", "Show animeloop help")
         ("v,version", "Show animeloop version")
         ("i,input", "Input video file path", value<string>(input))
         ("o,output", "Output video directory path", value<string>(output)->default_value(rpath.string()))
-        ("episode", "Episode name of the source video (default: <filename>)", value<string>(episode))
-        ("series", "Series name of the source video  (default: <filename>)", value<string>(series))
-        ("min-duration", "Minimum duration (second) of loop video", value<double>(min_duration)->default_value("0.8"))
-        ("max-duration", "Maximum duration (second) of loop video", value<double>(max_duration)->default_value("4.0"))
+        ("title", "Title name of the source video (default: <filename>)", value<string>(title))
+        ("min-duration", "Minimum duration (second) of loop video", value<double>(min_duration)->default_value("0.6"))
+        ("max-duration", "Maximum duration (second) of loop video", value<double>(max_duration)->default_value("6.0"))
         ("cover", "Output loop video cover image.")
         ;
         
@@ -49,17 +48,14 @@ int main(int argc, char * argv[]) {
         }
         
         if (options.count("input")) {
-            if (episode == "") {
-                episode = path(input).stem().string();
+            if (title == "") {
+                title = path(input).stem().string();
             }
 
-            if (series == "") {
-                series = path(input).stem().string();
-            }
-            
-            al::LoopVideo loop_video(series, episode, input, output);
-            loop_video.kMinduration = min_duration;
-            loop_video.kMaxduration = max_duration;
+            al::LoopVideo loop_video(input, output);
+            loop_video.title = title;
+            loop_video.min_duration = min_duration;
+            loop_video.max_duration = max_duration;
             
             if (options.count("cover")) {
                 loop_video.cover_enabled = true;

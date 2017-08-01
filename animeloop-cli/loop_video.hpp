@@ -16,51 +16,48 @@
 #include <boost/filesystem.hpp>
 
 namespace al {
-    const std::string kVersion = "1.3.2";
+    const std::string kVersion = "2.0.0";
 
     class LoopVideo {
     public:
         // infomation
         std::string filename;
-        std::string series;
-        std::string episode;
+        std::string title;
         
         // I/O path
-        boost::filesystem::path input_path;
+        boost::filesystem::path input_filepath;
         boost::filesystem::path output_path;
-        boost::filesystem::path caches_path;
-        boost::filesystem::path dhash_filename;
-        boost::filesystem::path phash_filename;
-        boost::filesystem::path resized_video_filename;
+        boost::filesystem::path loops_dirpath;
+        boost::filesystem::path caches_dirpath;
+        boost::filesystem::path phash_filepath;
+        boost::filesystem::path cuts_filepath;
+        boost::filesystem::path resized_video_filepath;
         std::string output_type = "mp4";
-//        boost::filesystem::path face_cascade_filename;
-        
-        // Effect the final results.
-        double kMinduration = 0.6;
-        double kMaxduration = 6;
-        int kResizedHeight = 32;
-        int kResizedWidth = 32;
-        double kVarience = 1.0;
+
+        // settings
+        double min_duration = 0.6;
+        double max_duration = 6.0;
+        int resize_length = 64;
+        int hash_length = 64;
+        int phash_dct_length = 16;
         bool cover_enabled = false;
 
+        // Data
         VideoInfo info;
-        HashVector dhash_strings;
         HashVector phash_strings;
         LoopDurations durations;
         LoopDurations filtered_durations;
-        FrameVector frames;
+        FrameVector resized_frames;
+        CutVector cuts;
         
         /**
          Class LoopVideo constructor.
-         
-         @param series series title
-         @param episode episode title
+
          @param input input file path
          @param output output file path
          */
-        LoopVideo(std::string series, std::string episode, std::string input, std::string output);
-//        cv::CascadeClassifier face_cascade;
-        
+        LoopVideo(std::string input, std::string output_path);
+
         /**
          Initial resized video file, pHash and dHash file for cache.
          */

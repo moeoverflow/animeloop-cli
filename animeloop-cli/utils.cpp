@@ -16,6 +16,7 @@
 #include <openssl/md5.h>
 #include <numeric>
 #include <sys/wait.h>
+#include <fstream>
 
 
 using namespace std;
@@ -35,28 +36,28 @@ VideoInfo al::get_info(VideoCapture &capture) {
     return info;
 }
 
-VideoInfo al::get_info(std::string filename) {
+VideoInfo al::get_info(boost::filesystem::path filename) {
     VideoCapture capture;
-    capture.open(filename);
+    capture.open(filename.string());
     return get_info(capture);
 }
 
 
-int fork_resize_video(path input, path temp_filename, Size size) {
+int fork_resize_video(path input_filepath, path temp_filepath, Size size) {
     int pid = fork();
     if(pid != 0) {
         /* We're in the parent process, return the child's pid. */
         return pid;
     }
     /* Otherwise, we're in the child process, so let's exec curl. */
-    execlp("ffmpeg", "ffmpeg", "-loglevel", "panic", "-i", input.string().c_str(), "-s", (to_string(size.width) + "x" + to_string(size.height)).c_str(), "-an", temp_filename.string().c_str(), NULL);
+    execlp("ffmpeg", "ffmpeg", "-loglevel", "panic", "-i", input_filepath.string().c_str(), "-s", (to_string(size.width) + "x" + to_string(size.height)).c_str(), "-an", temp_filepath.string().c_str(), NULL);
 
     exit(100);
 }
 
-void al::resize_video(path input, path output, Size size) {
-    path temp_output = output.parent_path().append("temp");
-    path temp_filename = path(temp_output).append(output.filename().string());
+void al::resize_video(path input_filepath, path output_filepath, Size size) {
+    path temp_output = path(output_filepath).parent_path().append("temp");
+    path temp_filename = path(temp_output).append(output_filepath.filename().string());
     if (!exists(temp_output)) {
         create_directories(temp_output);
     } else {
@@ -65,13 +66,12 @@ void al::resize_video(path input, path output, Size size) {
         }
     }
 
-    auto if_exists = exists(output);
+    auto if_exists = exists(output_filepath);
     
     if (!if_exists) {
         if (system("which ffmpeg") == 0) {
             cout << "Resizing video..." << endl;
-
-            int cpid = fork_resize_video(input, temp_filename, size);
+            int cpid = fork_resize_video(input_filepath, temp_filename, size);
             if(cpid == -1) {
                 /* Failed to fork */
                 cerr << "Fork failed" << endl;
@@ -95,7 +95,7 @@ void al::resize_video(path input, path output, Size size) {
             // Calculate hash string per frame.
             cout << "Resizing video... 0%" << endl;
             VideoCapture capture;
-            capture.open(input.string());
+            capture.open(input_filepath.string());
 
             VideoInfo info = get_info(capture);
 
@@ -120,14 +120,14 @@ void al::resize_video(path input, path output, Size size) {
             capture.release();
         }
 
-        system(("mv " + temp_filename.string() + " " + output.string()).c_str());
+        rename(temp_filename, output_filepath);
     }
 }
 
-bool al::get_frames(string file, FrameVector &frames) {
+bool al::get_frames(boost::filesystem::path file, FrameVector &frames) {
     FrameVector _frames;
     VideoCapture capture;
-    capture.open(file);
+    capture.open(file.string());
     
     cv::Mat image;
     while (capture.read(image)) {
@@ -139,7 +139,7 @@ bool al::get_frames(string file, FrameVector &frames) {
     return true;
 }
 
-void al::get_hash_strings(path filename, string type, HashVector &hash_strings, path hash_file) {
+void al::get_hash_strings(boost::filesystem::path filename, string type, int length, int dct_length, HashVector &hash_strings, path hash_file) {
     path temp_path = hash_file.parent_path().append("temp");
     path temp_filename = path(temp_path).append(hash_file.filename().string());
 
@@ -184,8 +184,7 @@ void al::get_hash_strings(path filename, string type, HashVector &hash_strings, 
                 percent++;
                 std::cout << "Calculating " << type << " value... " << percent << "%" << std::endl;
             }
-            
-            string hash = al::hash(type, image, 8);
+            string hash = al::pHash(image, length, dct_length);
             hashs.push_back(hash);
             image.release();
             count++;
@@ -198,8 +197,82 @@ void al::get_hash_strings(path filename, string type, HashVector &hash_strings, 
         std::copy(hashs.begin(), hashs.end(), output_iterator);
         output_file.close();
 
-        system(("mv " + temp_filename.string() + " " + hash_file.string()).c_str());
+        rename(temp_filename, hash_file);
     }
+}
+
+void al::get_cuts(boost::filesystem::path resized_video_filepath, CutVector &cuts, boost::filesystem::path cuts_filepath) {
+    path temp_path = cuts_filepath.parent_path().append("temp");
+    path temp_filename = path(temp_path).append(cuts_filepath.filename().string());
+    CutVector _cuts;
+
+    if (!exists(temp_path)) {
+        create_directories(temp_path);
+    } else {
+        if (exists(temp_filename)) {
+            remove(temp_filename);
+        }
+    }
+
+    auto if_exists = exists(cuts_filepath);
+    if (if_exists) {
+        cout << "Restore cuts data from file..." << endl;
+
+        std::ifstream input_file(cuts_filepath.string());
+
+        int cut;
+        while(input_file >> cut) {
+            _cuts.push_back(cut);
+        }
+
+        input_file.close();
+    } else {
+        Mat prevframe, nextframe, differframe;
+        int i = 0;
+
+        VideoCapture capture(resized_video_filepath.string());
+
+        capture.read(prevframe);
+        cvtColor(prevframe, prevframe, CV_RGB2GRAY);
+
+        while (capture.read(nextframe)) {
+            cvtColor(nextframe, nextframe, CV_RGB2GRAY);
+
+            absdiff(nextframe, prevframe, differframe);
+
+            int count = 0;
+            int total = differframe.rows * differframe.cols;
+
+            for (int row = 0; row < differframe.rows; ++row) {
+                for (int col = 0; col < differframe.cols; ++col) {
+                    if (differframe.at<uchar>(row, col) > 10) {
+                        count++;
+                    }
+                }
+            }
+
+            double rate = (total != 0) ? double(count) / total : 0;
+
+            if (rate > 0.8) {
+                _cuts.push_back(i);
+            }
+
+            prevframe = nextframe;
+            i++;
+        }
+        capture.release();
+
+
+        std::ofstream output_file(temp_filename.string());
+
+        for (auto cut : _cuts) {
+            output_file << cut << " ";
+        }
+        output_file.close();
+
+        rename(temp_filename, cuts_filepath);
+    }
+    cuts = _cuts;
 }
 
 
@@ -219,6 +292,23 @@ double al::get_mean(Mat image) {
     int64 sum = std::accumulate(image.begin<uchar>(), image.end<uchar>(), 0);
     double mean = sum / double(image.cols * image.rows);
     return mean;
+}
+
+Vec3b al::get_mean_rgb(Mat image) {
+    int total_b = 0, total_g = 0, total_r = 0;
+    for (int row = 0; row < image.rows; ++row) {
+        for (int col = 0; col < image.cols; ++col) {
+            total_b += image.at<Vec3b>(row, col)[0];
+            total_g += image.at<Vec3b>(row, col)[1];
+            total_r += image.at<Vec3b>(row, col)[2];
+        }
+    }
+    int mean_b = total_b / (image.cols*image.cols);
+    int mean_g = total_g / (image.cols*image.cols);
+    int mean_r = total_r / (image.cols*image.cols);
+
+    Vec3b rgb(mean_b, mean_g, mean_r);
+    return rgb;
 }
 
 std::string al::time_string(double seconds) {

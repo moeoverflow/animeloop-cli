@@ -26,19 +26,6 @@ void cvt_image(cv::Mat &image, int length) {
     }
 }
 
-string al::hash(string type, Mat image, int length) {
-    transform(type.begin(), type.end(), type.begin(), [](unsigned char c) { return std::tolower(c); });
-    if (type == "ahash") {
-        return al::aHash(image, length);
-    } else if (type == "dhash") {
-        return al::dHash(image, length);
-    } else if (type == "phash") {
-        return al::pHash(image, length);
-    } else {
-        return string();
-    }
-}
-
 string al::aHash(Mat image, int length) {
     cvt_image(image, length);
     
@@ -70,19 +57,27 @@ string al::dHash(Mat image, int length) {
     return hash_string;
 }
 
-string al::pHash(Mat image, int length) {
+string al::pHash(Mat image, int length, int dct_length) {
     cvt_image(image, length);
 
-    Mat img = Mat_<double>(image);
-    dct(img, img);
+    Mat dct = Mat_<double>(image);
+    cv::dct(dct, dct);
     
     string hash_string = "";
 
-    double mean = accumulate(img.begin<double>(), img.end<double>(), 0.0) / (length * length);
-    
-    for (int i = 0; i < length; ++i) {
-        for (int j = 0; j < length; ++j) {
-            hash_string += (img.at<double>(i, j) >= mean ? "1" : "0");
+    double mean = 0.0;
+    for (int i = 0; i < dct_length; ++i)
+    {
+        for (int j = 0; j < dct_length; ++j)
+        {
+            mean += dct.at<double>(i, j);
+        }
+    }
+    mean /= length * length;
+
+    for (int i = 0; i < dct_length; ++i) {
+        for (int j = 0; j < dct_length; ++j) {
+            hash_string += (dct.at<double>(i, j) >= mean ? "1" : "0");
         }
     }
     return hash_string;
@@ -112,14 +107,4 @@ unsigned int al::hamming_distance(int64_t n1, int64_t n2) {
         count += difference & 1;
     }
     return count;
-}
-
-vector<Rect> detect_face(Mat image, CascadeClassifier &face_cascade) {
-    vector<Rect> faces;
-    
-    cvt_image(image, 0);
-    cv::equalizeHist(image, image);
-
-    face_cascade.detectMultiScale(image, faces);
-    return faces;
 }

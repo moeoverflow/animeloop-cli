@@ -17,6 +17,7 @@ namespace al {
     typedef std::vector<LoopDuration> LoopDurations;
     typedef std::vector<std::string> HashVector;
     typedef std::vector<cv::Mat> FrameVector;
+    typedef std::vector<int> CutVector;
         
     struct VideoInfo {
         double fps;

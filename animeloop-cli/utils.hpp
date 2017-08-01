@@ -12,13 +12,14 @@
 #include "models.hpp"
 
 #include <iostream>
+
 #include <string>
 #include <opencv2/opencv.hpp>
 #include <boost/filesystem/path.hpp>
 
 
 namespace al {
-    VideoInfo get_info(std::string filename);
+    VideoInfo get_info(boost::filesystem::path filename);
 
     VideoInfo get_info(cv::VideoCapture &capture);
 
@@ -31,14 +32,20 @@ namespace al {
      */
     void resize_video(boost::filesystem::path input, boost::filesystem::path output, cv::Size size);
 
-    bool get_frames(std::string file, FrameVector &frames);
+    bool get_frames(boost::filesystem::path file, FrameVector &frames);
 
-    void get_hash_strings(boost::filesystem::path filename, std::string type, al::HashVector &hash_strings,
+    void get_hash_strings(boost::filesystem::path filename, std::string type, int length, int dct_length, al::HashVector &hash_strings,
                           boost::filesystem::path hash_file);
+
+    void get_cuts(boost::filesystem::path resized_filepath, CutVector &cuts, boost::filesystem::path cuts_filepath);
+
 
     double get_variance(std::vector<int> distances);
 
     double get_mean(cv::Mat image);
+
+    cv::Vec3b get_mean_rgb(cv::Mat image);
+
 
 
     /**

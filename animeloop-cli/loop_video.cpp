@@ -20,63 +20,69 @@ using namespace cv;
 using namespace al;
 
 
-al::LoopVideo::LoopVideo(std::string series, std::string episode, std::string input, std::string output) {
-
-    this->md5 = al::md5_of_file(input);
-
-    this->series = series;
-    this->episode = episode;
+al::LoopVideo::LoopVideo(std::string input, std::string output_path) {
+    this->md5 = md5_of_file(input);
 
     this->filename = path(input).stem().string();
+    this->title = this->filename;
 
-    this->input_path = path(input);
-    this->output_path = path(output).append("loops").append(this->filename);
-    this->caches_path = path(output).append("caches").append(this->md5);
-    
-    this->dhash_filename = path(caches_path).append(this->md5 + "_dHash.txt");
-    this->phash_filename = path(caches_path).append(this->md5 + "_pHash.txt");
+    this->input_filepath = path(input);
+    this->output_path = path(output_path);
+    this->loops_dirpath = path(output_path).append("loops").append(this->filename);
+    this->caches_dirpath = path(output_path).append("caches").append(this->filename);
 
-    this->resized_video_filename = path(caches_path).append(this->md5 + "_resized." + this->output_type);
+    string phash_filename = this->filename + "_pHash.txt";
+    this->phash_filepath = path(caches_dirpath).append(phash_filename);
+    string resized_video_filename = this->filename + "_" + to_string(this->resize_length) + "x" + to_string(this->resize_length) + "." + this->output_type;
+    this->resized_video_filepath = path(caches_dirpath).append(resized_video_filename);
+    string cuts_filename = this->filename + "_cuts.txt";
+    this->cuts_filepath = path(caches_dirpath).append(cuts_filename);
+
 
     if (!exists(this->output_path)) {
         create_directories(this->output_path);
     }
-    if (!exists(this->caches_path)) {
-        create_directories(this->caches_path);
+    if (!exists(this->caches_dirpath)) {
+        create_directories(this->caches_dirpath);
+    }
+    if (!exists(this->loops_dirpath)) {
+        create_directories(this->loops_dirpath);
     }
 }
 
 void al::LoopVideo::init() {
-    resize_video(this->input_path, this->resized_video_filename, cv::Size(this->kResizedWidth, this->kResizedHeight));
-    get_frames(this->resized_video_filename.string(), this->frames);
-    get_hash_strings(this->resized_video_filename.string(), "dHash", this->dhash_strings, this->dhash_filename.string());
-    get_hash_strings(this->resized_video_filename.string(), "pHash", this->phash_strings, this->phash_filename.string());
-    this->info = get_info(this->resized_video_filename.string());
+    resize_video(this->input_filepath, this->resized_video_filepath, cv::Size(this->resize_length, this->resize_length));
+    get_frames(this->resized_video_filepath, this->resized_frames);
+    get_hash_strings(this->resized_video_filepath, "pHash", this->hash_length, this->phash_dct_length, this->phash_strings, this->phash_filepath);
+    get_cuts(this->resized_video_filepath, this->cuts, this->cuts_filepath);
+    this->info = get_info(this->resized_video_filepath.string());
 
-    filter_0(this, this->durations);
+    filter::all_loops(this, this->durations);
 }
 
 
 void al::LoopVideo::filter() {
     LoopDurations filtered_durations(this->durations);
-    
-    filter_1(this, filtered_durations);
-    filter_2(this, filtered_durations);
-    filter_3(this, filtered_durations);
-    
+
+    filter::cut_in_loop(this, filtered_durations);
+    filter::loop_nearby(this, filtered_durations);
+    filter::loop_tiny_frame_change(this, filtered_durations);
+    filter::loop_white_or_black(this, filtered_durations);
+    filter::loop_same_color(this, filtered_durations);
+
     this->filtered_durations = filtered_durations;
 }
 
 void al::LoopVideo::print(LoopDurations durations) {
-    VideoInfo info = get_info(this->input_path.string());
+    VideoInfo info = get_info(this->input_filepath);
     
     cout << "Total count: " << durations.size() << endl;
     cout << "Loop parts of this video:" << endl;
     for (auto duration : durations) {
         long start_frame, end_frame;
-        std::tie(start_frame, end_frame) = duration;
-        
-        std::cout << al::time_string(start_frame / info.fps) << " ~ " << al::time_string(end_frame / info.fps) << std::endl;
+        tie(start_frame, end_frame) = duration;
+        cout << start_frame << " ~ " << end_frame << "  ";
+        cout << al::time_string(start_frame / info.fps) << " ~ " << al::time_string(end_frame / info.fps) << endl;
     }
 }
 
@@ -93,13 +99,12 @@ int fork_gen_cover(string video_filepath, string cover_filepath) {
 }
 
 void al::LoopVideo::generate(const LoopDurations durations) {
-    VideoInfo info = get_info(this->input_path.string());
+    VideoInfo info = get_info(this->input_filepath);
     
     Json::Value videos_json;
-    videos_json["series"] = this->series;
-    videos_json["episode"] = this->episode;
+    videos_json["title"] = this->title;
 
-    videos_json["animeloop_ver"] = kVersion;
+    videos_json["version"] = kVersion;
     
     Json::Value source_json;
     source_json["filename"] = this->filename;
@@ -116,12 +121,12 @@ void al::LoopVideo::generate(const LoopDurations durations) {
         
         string base_filename = "frame_from_" + to_string(start_frame) + "_to_" + to_string(end_frame);
         auto video_filename = base_filename + "_" + to_string(info.size.width) + "x" + to_string(info.size.height) + "." + this->output_type;
-        auto video_filepath = path(this->output_path).append(video_filename).string();
+        auto video_filepath = path(this->loops_dirpath).append(video_filename).string();
         auto cover_filename = base_filename + "_cover.jpg";
-        auto cover_filepath = path(this->output_path).append(cover_filename).string();
+        auto cover_filepath = path(this->loops_dirpath).append(cover_filename).string();
         
         VideoCapture capture;
-        capture.open(this->input_path.string());
+        capture.open(this->input_filepath.string());
         
         if (!exists(video_filepath)) {
             capture.set(CV_CAP_PROP_POS_FRAMES, start_frame);
@@ -188,8 +193,7 @@ void al::LoopVideo::generate(const LoopDurations durations) {
     });
     
     string json_string = videos_json.toStyledString();
-    std::ofstream out(path(this->output_path).append(this->filename + ".json").string());
+    std::ofstream out(path(this->loops_dirpath).append(this->filename + ".json").string());
     out << json_string;
     out.close();
 }
-

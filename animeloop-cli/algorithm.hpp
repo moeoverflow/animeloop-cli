@@ -15,17 +15,6 @@
 
 namespace al {
     /**
-     choose which hash type
-     value can be "ahash", "dhash" or "phash"
-     
-     @param type which type of hash
-     @param image target image
-     @param length resize height and width
-     @return aHash tring
-     */
-    std::string hash(std::string type, cv::Mat image, int length);
-    
-    /**
      calculate aHash string of an image.
      
      @param image target image
@@ -33,7 +22,7 @@ namespace al {
      @return aHash tring
      */
     std::string aHash(cv::Mat image, int length);
-    
+
     /**
      calculate dHash string of an image.
      
@@ -42,17 +31,18 @@ namespace al {
      @return dHash string
      */
     std::string dHash(cv::Mat image, int length);
-    
+
     /**
      calculate pHash string of an image.
      
      @param image target image
-     @param length resize height and width(length > 8)
+     @param length resize height and width (recommend length > 32)
+     @param dct_length dct size (recommend length > 8)
      @return pHash string
      */
-    std::string pHash(cv::Mat image, int length);
-    
-    
+    std::string pHash(cv::Mat image, int length, int dct_length);
+
+
     /**
      Calculate hamming distance between two image hash strings.
      
@@ -61,7 +51,7 @@ namespace al {
      @return hamming distance value
      */
     unsigned int hamming_distance(std::string str1, std::string str2);
-    
+
     /**
      Calculate hamming distance between two image hash int64 value.
      
