@@ -110,7 +110,7 @@ void al::filter::loop_nearby(al::LoopVideo *loop, al::LoopDurations &durations) 
         int distance_begin = hamming_distance(hashs[prev_begin], hashs[next_begin]);
         int distance_end = hamming_distance(hashs[prev_end], hashs[next_end]);
 
-        int filter_n = hashs[0].size() / 4;
+        int filter_n = hashs[0].size() / 2.5;
         if (distance_begin >= filter_n && distance_end >= filter_n) {
             _durations.push_back(*it);
         }
