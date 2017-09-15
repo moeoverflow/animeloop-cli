@@ -2,8 +2,14 @@
 Anime loop video command line tool.
 
 
+### Install via Arch Linux User Repository (aur)
+#### with [yaourt](https://wiki.archlinux.org/index.php/Yaourt)
+``` Shell
+yaourt -S animeloop-cli
+```
 
-### Installation
+
+### Install Manually
 
 #### Modules Init
 
@@ -29,8 +35,7 @@ brew install boost
 brew install ffmpeg
 ```
 
-##### Linux
-
+##### Ubuntu (obsoleted)
 ``` Shell
 # OpenCV
 sudo apt-get -y install libopencv-dev build-essential cmake git libgtk2.0-dev pkg-config python-dev python-numpy libdc1394-22 libdc1394-22-dev libjpeg-dev libpng12-dev libjasper-dev libavcodec-dev libavformat-dev libswscale-dev libgstreamer0.10-dev libgstreamer-plugins-base0.10-dev libv4l-dev libtbb-dev libqt4-dev libfaac-dev libmp3lame-dev libopencore-amrnb-dev libopencore-amrwb-dev libtheora-dev libvorbis-dev libxvidcore-dev x264 v4l-utils unzip
@@ -69,13 +74,13 @@ sudo apt update && sudo apt install ffmpeg
 
 #### Compile & Build 
 
-##### Xcode
+##### via Xcode
 
 Open `animeloop-cli.xcodeproj` and run it.
 
-(if you compile opencv source code by yourself, you maybe need edit `Linked Frameworks and Libraries` settings in Xcode project.)
+(If you have compiled `opencv` source code by yourself, you may need to edit `Linked Frameworks and Libraries` settings in Xcode project.)
 
-##### cmake
+##### via cmake
 
 ``` Shell
 cd animeloop-cli
@@ -89,7 +94,7 @@ make
 (make install)
 ```
 
-## Usage
+### Usage
 
 ```Shell
 
