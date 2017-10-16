@@ -19,10 +19,9 @@
 		8818F2EC1E920F260085F368 /* models.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8818F2EA1E920F260085F368 /* models.cpp */; };
 		8818F2EF1E920F3E0085F368 /* utils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8818F2ED1E920F3E0085F368 /* utils.cpp */; };
 		8818F2F51E9242310085F368 /* filter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8818F2F31E9242310085F368 /* filter.cpp */; };
-		884E2E261F30D787001EA03E /* libcrypto.1.0.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 884E2E241F30D769001EA03E /* libcrypto.1.0.0.dylib */; };
 		88537E9D1E4C501900385BCB /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88537E9C1E4C501900385BCB /* main.cpp */; };
+		88C992831F947CF70012ED53 /* libjsoncpp.1.8.3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 88C992821F947CF70012ED53 /* libjsoncpp.1.8.3.dylib */; };
 		88DC61451E585CCE0062B914 /* algorithm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88DC61431E585CCE0062B914 /* algorithm.cpp */; };
-		88E08EB61E5ACAD60080D35E /* jsoncpp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88E08EB51E5ACAD60080D35E /* jsoncpp.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -62,13 +61,11 @@
 		88537EAC1E4C671F00385BCB /* libopencv_imgproc.3.2.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopencv_imgproc.3.2.0.dylib; path = ../../../../../usr/local/lib/libopencv_imgproc.3.2.0.dylib; sourceTree = "<group>"; };
 		889337CA1E9E318C004C69AD /* libopencv_face.3.2.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopencv_face.3.2.0.dylib; path = ../../../../../usr/local/lib/libopencv_face.3.2.0.dylib; sourceTree = "<group>"; };
 		889337CC1E9E31AE004C69AD /* libopencv_objdetect.3.2.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopencv_objdetect.3.2.0.dylib; path = ../../../../../usr/local/lib/libopencv_objdetect.3.2.0.dylib; sourceTree = "<group>"; };
+		88C992821F947CF70012ED53 /* libjsoncpp.1.8.3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libjsoncpp.1.8.3.dylib; path = ../../../../../usr/local/Cellar/jsoncpp/1.8.3/lib/libjsoncpp.1.8.3.dylib; sourceTree = "<group>"; };
 		88DC61431E585CCE0062B914 /* algorithm.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = algorithm.cpp; path = "animeloop-cli/algorithm.cpp"; sourceTree = "<group>"; };
 		88DC61441E585CCE0062B914 /* algorithm.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = algorithm.hpp; path = "animeloop-cli/algorithm.hpp"; sourceTree = "<group>"; };
 		88DC91531E7FD737005C122D /* libMagick++-7.Q16HDRI.2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libMagick++-7.Q16HDRI.2.dylib"; path = "../../../../../usr/local/Cellar/imagemagick/7.0.5-3/lib/libMagick++-7.Q16HDRI.2.dylib"; sourceTree = "<group>"; };
 		88DC91551E7FD7BF005C122D /* libMagick++-7.Q16HDRI.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libMagick++-7.Q16HDRI.a"; path = "../../../../../usr/local/Cellar/imagemagick/7.0.5-3/lib/libMagick++-7.Q16HDRI.a"; sourceTree = "<group>"; };
-		88E08EB51E5ACAD60080D35E /* jsoncpp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = jsoncpp.cpp; path = jsoncpp/dist/jsoncpp.cpp; sourceTree = "<group>"; };
-		88E08EB81E5ACB030080D35E /* json-forwards.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "json-forwards.h"; sourceTree = "<group>"; };
-		88E08EB91E5ACB030080D35E /* json.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = json.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -76,15 +73,15 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				884E2E261F30D787001EA03E /* libcrypto.1.0.0.dylib in Frameworks */,
+				88C992831F947CF70012ED53 /* libjsoncpp.1.8.3.dylib in Frameworks */,
 				88088C1A1E4E333A00601DBD /* libboost_date_time.dylib in Frameworks */,
 				88088C181E4E29E400601DBD /* libboost_system.dylib in Frameworks */,
+				88088C111E4E28B900601DBD /* libboost_filesystem.dylib in Frameworks */,
 				88088C121E4E294600601DBD /* libopencv_core.3.2.0.dylib in Frameworks */,
 				88088C131E4E294600601DBD /* libopencv_imgcodecs.3.2.0.dylib in Frameworks */,
 				88088C141E4E294600601DBD /* libopencv_imgproc.3.2.0.dylib in Frameworks */,
 				88088C151E4E294600601DBD /* libopencv_video.3.2.0.dylib in Frameworks */,
 				88088C161E4E294600601DBD /* libopencv_videoio.3.2.0.dylib in Frameworks */,
-				88088C111E4E28B900601DBD /* libboost_filesystem.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -130,7 +127,6 @@
 				88537E9B1E4C501900385BCB /* animeloop-cli */,
 				88088BF91E4DF6B700601DBD /* loop-video */,
 				88088BFA1E4E1BEF00601DBD /* cxxopts */,
-				88E08E731E5AC9950080D35E /* jsoncpp */,
 				88537E9A1E4C501900385BCB /* Products */,
 				88537EA61E4C52CC00385BCB /* Frameworks */,
 			);
@@ -155,6 +151,7 @@
 		88537EA61E4C52CC00385BCB /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				88C992821F947CF70012ED53 /* libjsoncpp.1.8.3.dylib */,
 				884E2E241F30D769001EA03E /* libcrypto.1.0.0.dylib */,
 				889337CC1E9E31AE004C69AD /* libopencv_objdetect.3.2.0.dylib */,
 				889337CA1E9E318C004C69AD /* libopencv_face.3.2.0.dylib */,
@@ -172,25 +169,6 @@
 				88537EA71E4C52CC00385BCB /* libopencv_core.3.2.0.dylib */,
 			);
 			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		88E08E731E5AC9950080D35E /* jsoncpp */ = {
-			isa = PBXGroup;
-			children = (
-				88E08EB71E5ACB030080D35E /* json */,
-				88E08EB51E5ACAD60080D35E /* jsoncpp.cpp */,
-			);
-			name = jsoncpp;
-			sourceTree = "<group>";
-		};
-		88E08EB71E5ACB030080D35E /* json */ = {
-			isa = PBXGroup;
-			children = (
-				88E08EB81E5ACB030080D35E /* json-forwards.h */,
-				88E08EB91E5ACB030080D35E /* json.h */,
-			);
-			name = json;
-			path = jsoncpp/dist/json;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -250,7 +228,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				88E08EB61E5ACAD60080D35E /* jsoncpp.cpp in Sources */,
 				8818F2F51E9242310085F368 /* filter.cpp in Sources */,
 				8818F2EC1E920F260085F368 /* models.cpp in Sources */,
 				88DC61451E585CCE0062B914 /* algorithm.cpp in Sources */,
@@ -372,8 +349,7 @@
 					/usr/local/lib,
 					/usr/local/Cellar/ffmpeg/3.2.3/lib,
 					/usr/local/Cellar/boost/1.63.0/lib,
-					/usr/local/Cellar/openssl/1.0.2j/lib,
-					/usr/local/Cellar/openssl/1.0.2l/lib,
+					/usr/local/Cellar/jsoncpp/1.8.3/lib,
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -390,8 +366,7 @@
 					/usr/local/lib,
 					/usr/local/Cellar/ffmpeg/3.2.3/lib,
 					/usr/local/Cellar/boost/1.63.0/lib,
-					/usr/local/Cellar/openssl/1.0.2j/lib,
-					/usr/local/Cellar/openssl/1.0.2l/lib,
+					/usr/local/Cellar/jsoncpp/1.8.3/lib,
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				PRODUCT_NAME = "$(TARGET_NAME)";

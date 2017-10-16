@@ -9,11 +9,11 @@
 #include "utils.hpp"
 #include "algorithm.hpp"
 
-#include "json.h"
+#include <json/json.h>
 #include <boost/filesystem.hpp>
 #include <boost/date_time/posix_time/posix_time.hpp>
 #include <boost/regex.hpp>
-#include <openssl/md5.h>
+//#include <openssl/md5.h>
 #include <numeric>
 #include <sys/wait.h>
 #include <fstream>
@@ -315,25 +315,4 @@ std::string al::time_string(double seconds) {
     auto ms = boost::posix_time::milliseconds(seconds * 1000);
     auto time = boost::posix_time::time_duration(ms);
     return boost::posix_time::to_simple_string(time);
-}
-
-std::string al::md5_of_file(std::string filename) {
-    MD5_CTX ctx;
-    MD5_Init(&ctx);
-    
-    std::ifstream ifs(filename, std::ios::binary);
-    
-    char file_buffer[4096];
-    while (ifs.read(file_buffer, sizeof(file_buffer)) || ifs.gcount()) {
-        MD5_Update(&ctx, file_buffer, ifs.gcount());
-    }
-    unsigned char digest[MD5_DIGEST_LENGTH] = {};
-    MD5_Final(digest, &ctx);
-    
-    std::stringstream stream;
-    for(unsigned i=0; i <MD5_DIGEST_LENGTH; i++) {
-        stream << std::hex << std::setw(2) << std::setfill('0') << static_cast<int>(digest[i]);
-    }
-    std::string md5_string = stream.str();
-    return md5_string;
 }

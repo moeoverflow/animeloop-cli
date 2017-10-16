@@ -55,14 +55,6 @@ namespace al {
      @return Time string
      */
     std::string time_string(double seconds);
-
-    /**
-     Generate the MD5 checksum of a file.
-
-     @param filename file path
-     @return md5 string value
-     */
-    std::string md5_of_file(std::string filename);
 }
 
 #endif /* utils_hpp */

@@ -16,7 +16,8 @@
 #include <boost/filesystem.hpp>
 
 namespace al {
-    const std::string kVersion = "2.0.0";
+    const std::string kVersion = "2.0.1";
+    const std::string kOutputVersion = "2.0.0";
 
     class LoopVideo {
     public:
@@ -81,11 +82,7 @@ namespace al {
          @param durations durations data
          */
         void generate(const al::LoopDurations filtered_durations);
-
-    private:
-        std::string md5;
     };
 }
-
 
 #endif /* loop_video_hpp */

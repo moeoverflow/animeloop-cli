@@ -11,7 +11,7 @@
 #include "utils.hpp"
 #include "filter.hpp"
 
-#include "json.h"
+#include <json/json.h>
 #include <sys/wait.h>
 
 using namespace std;
@@ -21,7 +21,6 @@ using namespace al;
 
 
 al::LoopVideo::LoopVideo(std::string input, std::string output_path) {
-    this->md5 = md5_of_file(input);
 
     this->filename = path(input).stem().string();
     this->title = this->filename;
@@ -100,15 +99,14 @@ int fork_gen_cover(string video_filepath, string cover_filepath) {
 
 void al::LoopVideo::generate(const LoopDurations durations) {
     VideoInfo info = get_info(this->input_filepath);
-    
+
     Json::Value videos_json;
     videos_json["title"] = this->title;
 
-    videos_json["version"] = kVersion;
+    videos_json["version"] = kOutputVersion;
     
     Json::Value source_json;
     source_json["filename"] = this->filename;
-    source_json["md5"] = this->md5;
     videos_json["source"].append(source_json);
     
     int count = 0;
@@ -185,10 +183,7 @@ void al::LoopVideo::generate(const LoopDurations durations) {
         period_json["begin"] = al::time_string(start_frame / info.fps);
         period_json["end"] = al::time_string(end_frame / info.fps);
         video_json["period"] = period_json;
-        
-        auto md5 = al::md5_of_file(video_filepath);
-        video_json["md5"] = md5;
-        
+
         videos_json["loops"].append(video_json);
     });
     
