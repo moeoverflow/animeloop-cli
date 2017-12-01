@@ -8,7 +8,8 @@ add_subdirectory(${PROJECT_SOURCE_DIR}/cxxopts)
 include_directories(${PROJECT_SOURCE_DIR}/cxxopts/include)
 include_directories(${PROJECT_SOURCE_DIR}/research)
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread")
 
 set(CLI_SOURCE_FILES
     animeloop-cli/algorithm.cpp
@@ -21,7 +22,8 @@ set(CLI_SOURCE_FILES
     animeloop-cli/models.cpp
     animeloop-cli/models.hpp
     animeloop-cli/utils.cpp
-    animeloop-cli/utils.hpp)
+    animeloop-cli/utils.hpp
+    animeloop-cli/thread_pool.h)
 
 add_executable(animeloop-cli ${CLI_SOURCE_FILES})
 
@@ -60,6 +62,6 @@ target_link_libraries( cuts-switch ${OpenCV_LIBS})
 target_link_libraries( color ${OpenCV_LIBS})
 
 # Boost
-find_package(Boost COMPONENTS filesystem date_time system program_options REQUIRED)
+find_package(Boost COMPONENTS filesystem date_time REQUIRED)
 target_link_libraries( animeloop-cli ${Boost_LIBRARIES} )
 target_link_libraries( cuts-switch ${Boost_LIBRARIES} )

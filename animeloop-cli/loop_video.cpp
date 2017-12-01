@@ -10,6 +10,7 @@
 #include "algorithm.hpp"
 #include "utils.hpp"
 #include "filter.hpp"
+#include "thread_pool.h"
 
 #include <json/json.h>
 #include <sys/wait.h>
@@ -21,7 +22,6 @@ using namespace al;
 
 
 al::LoopVideo::LoopVideo(std::string input, std::string output_path) {
-
     this->filename = path(input).stem().string();
     this->title = this->filename;
 
@@ -36,7 +36,6 @@ al::LoopVideo::LoopVideo(std::string input, std::string output_path) {
     this->resized_video_filepath = path(caches_dirpath).append(resized_video_filename);
     string cuts_filename = this->filename + "_cuts.txt";
     this->cuts_filepath = path(caches_dirpath).append(cuts_filename);
-
 
     if (!exists(this->output_path)) {
         create_directories(this->output_path);
@@ -58,7 +57,6 @@ void al::LoopVideo::init() {
 
     filter::all_loops(this, this->durations);
 }
-
 
 void al::LoopVideo::filter() {
     LoopDurations filtered_durations(this->durations);
@@ -102,83 +100,113 @@ void al::LoopVideo::generate(const LoopDurations durations) {
 
     Json::Value videos_json;
     videos_json["title"] = this->title;
-
     videos_json["version"] = kOutputVersion;
-    
     Json::Value source_json;
     source_json["filename"] = this->filename;
     videos_json["source"].append(source_json);
-    
-    int count = 0;
-    for_each(durations.begin(), durations.end(), [&](const LoopDuration duration) {
-        count++;
 
+    /*
+     * Multi-threads support for generating result video files.
+     * */
+    unsigned int threads_num = std::thread::hardware_concurrency();
+    ThreadPool pool(threads_num);
+    vector<future<void>> futures;
+
+    for_each(durations.begin(), durations.end(), [&](const LoopDuration duration) {
+        long start_frame, end_frame;
+        tie(start_frame, end_frame) = duration;
+
+        string base_filename = "frame_from_" + to_string(start_frame) + "_to_" + to_string(end_frame);
+        auto video_filename =
+                base_filename + "_" + to_string(info.size.width) + "x" + to_string(info.size.height) + "." +
+                this->output_type;
+        auto video_filepath = path(this->loops_dirpath).append(video_filename).string();
+        auto cover_filename = base_filename + "_cover.jpg";
+        auto cover_filepath = path(this->loops_dirpath).append(cover_filename).string();
+        auto input_filename = this->input_filepath.string();
+
+        if (!exists(video_filepath)) {
+            futures.push_back(pool.enqueue([=]() -> void {
+                VideoCapture capture;
+                capture.open(input_filename);
+                capture.set(CV_CAP_PROP_POS_FRAMES, start_frame);
+                cv::VideoWriter writer(video_filepath, CV_FOURCC('H', '2', '6', '4'), info.fps, info.size);
+
+                cv::Mat image;
+                long frame = start_frame;
+                while (capture.read(image)) {
+                    // Exclude the last frame.
+                    if (frame >= end_frame) {
+                        break;
+                    }
+
+                    writer.write(image);
+                    frame++;
+                }
+                writer.release();
+                capture.release();
+            }));
+        }
+    });
+
+    /*
+     * Waiting for all thread jobs done.
+     * */
+    for_each(futures.begin(), futures.end(), [](future<void>& f) {
+        f.get();
+    });
+
+    /*
+     * generate cover files and info json file.
+     * */
+    for_each(durations.begin(), durations.end(), [&](const LoopDuration duration) {
         long start_frame, end_frame;
         tie(start_frame, end_frame) = duration;
         auto video_duration = (end_frame - start_frame) / info.fps;
-        
+
         string base_filename = "frame_from_" + to_string(start_frame) + "_to_" + to_string(end_frame);
         auto video_filename = base_filename + "_" + to_string(info.size.width) + "x" + to_string(info.size.height) + "." + this->output_type;
         auto video_filepath = path(this->loops_dirpath).append(video_filename).string();
         auto cover_filename = base_filename + "_cover.jpg";
         auto cover_filepath = path(this->loops_dirpath).append(cover_filename).string();
-        
-        VideoCapture capture;
-        capture.open(this->input_filepath.string());
-        
-        if (!exists(video_filepath)) {
-            capture.set(CV_CAP_PROP_POS_FRAMES, start_frame);
-            cv::VideoWriter writer(video_filepath, CV_FOURCC('H', '2', '6', '4'), info.fps, info.size);
-            
-            cv::Mat image;
-            long frame = start_frame;
-            while (capture.read(image)) {
-                // Exclude the last frame.
-                if (frame >= end_frame) {
-                    break;
-                }
-
-                writer.write(image);
-                frame++;
-            }
-            writer.release();
-        }
-        capture.release();
+        auto input_filename = this->input_filepath.string();
 
         if (cover_enabled && !exists(cover_filepath)) {
-            int cpid = fork_gen_cover(video_filepath, cover_filepath);
-            if(cpid == -1) {
-                /* Failed to fork */
-                cerr << "Fork failed" << endl;
-                throw;
-            }
+            futures.push_back(pool.enqueue([=]() -> void {
+                int cpid = fork_gen_cover(video_filepath, cover_filepath);
+                if(cpid == -1) {
+                    /* Failed to fork */
+                    cerr << "Fork failed" << endl;
+                    throw;
+                }
 
-            /* Optionally, wait for the child to exit and get
-               the exit status. */
-            int status;
-            waitpid(cpid, &status, 0);
-            if(! WIFEXITED(status)) {
-                cerr << "The child was killed or segfaulted or something." << endl;
-            }
+                /* Optionally, wait for the child to exit and get
+                   the exit status. */
+                int status;
+                waitpid(cpid, &status, 0);
+                if(! WIFEXITED(status)) {
+                    cerr << "The child was killed or segfaulted or something." << endl;
+                }
 
-            status = WEXITSTATUS(status);
+                status = WEXITSTATUS(status);
+            }));
         }
 
         // Save video info json file.
         Json::Value video_json;
-        
+
         Json::Value files_json;
         files_json["mp4_1080p"] = video_filename;
         files_json["jpg_1080p"] = cover_filename;
         video_json["files"] = files_json;
-        
+
         video_json["duration"] = video_duration;
-        
+
         Json::Value frame_json;
         frame_json["begin"] = to_string(start_frame);
         frame_json["end"] = to_string(end_frame);
         video_json["frame"] = frame_json;
-        
+
         Json::Value period_json;
         period_json["begin"] = al::time_string(start_frame / info.fps);
         period_json["end"] = al::time_string(end_frame / info.fps);
@@ -186,7 +214,7 @@ void al::LoopVideo::generate(const LoopDurations durations) {
 
         videos_json["loops"].append(video_json);
     });
-    
+
     string json_string = videos_json.toStyledString();
     std::ofstream out(path(this->loops_dirpath).append(this->filename + ".json").string());
     out << json_string;
