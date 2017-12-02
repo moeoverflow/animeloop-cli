@@ -23,7 +23,8 @@ set(CLI_SOURCE_FILES
     animeloop-cli/models.hpp
     animeloop-cli/utils.cpp
     animeloop-cli/utils.hpp
-    animeloop-cli/thread_pool.h)
+    animeloop-cli/thread_pool.h
+    animeloop-cli/progress_bar.hpp)
 
 add_executable(animeloop-cli ${CLI_SOURCE_FILES})
 
@@ -62,6 +63,8 @@ target_link_libraries( cuts-switch ${OpenCV_LIBS})
 target_link_libraries( color ${OpenCV_LIBS})
 
 # Boost
-find_package(Boost COMPONENTS filesystem date_time REQUIRED)
+SET(Boost_USE_STATIC_LIBS ON)
+find_package(Boost COMPONENTS filesystem date_time log REQUIRED)
 target_link_libraries( animeloop-cli ${Boost_LIBRARIES} )
 target_link_libraries( cuts-switch ${Boost_LIBRARIES} )
+

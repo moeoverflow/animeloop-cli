@@ -65,7 +65,6 @@ void al::filter::all_loops(al::LoopVideo *loop, al::LoopDurations &durations) {
 void al::filter::cut_in_loop(al::LoopVideo * loop, LoopDurations &durations)
 {
     LoopDurations _durations;
-    cout << durations.size() << endl;
 
     for (auto duration : durations) {
         long begin, end;
@@ -85,9 +84,6 @@ void al::filter::cut_in_loop(al::LoopVideo * loop, LoopDurations &durations)
     }
 
     durations = _durations;
-
-    cout << durations.size() << endl;
-
 }
 
 /**

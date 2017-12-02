@@ -8,15 +8,14 @@
 
 #include "utils.hpp"
 #include "algorithm.hpp"
+#include "progress_bar.hpp"
 
 #include <json/json.h>
 #include <boost/filesystem.hpp>
 #include <boost/date_time/posix_time/posix_time.hpp>
 #include <boost/regex.hpp>
-//#include <openssl/md5.h>
 #include <numeric>
 #include <sys/wait.h>
-#include <fstream>
 
 
 using namespace std;
@@ -67,10 +66,10 @@ void al::resize_video(path input_filepath, path output_filepath, Size size) {
     }
 
     auto if_exists = exists(output_filepath);
-    
+
     if (!if_exists) {
-        if (system("which ffmpeg") == 0) {
-            cout << "Resizing video..." << endl;
+        if (system("which ffmpeg1 &> /dev/null") == 0) {
+            cout << ":: resizing video..." << endl;
             int cpid = fork_resize_video(input_filepath, temp_filename, size);
             if(cpid == -1) {
                 /* Failed to fork */
@@ -88,36 +87,34 @@ void al::resize_video(path input_filepath, path output_filepath, Size size) {
 
             status = WEXITSTATUS(status);
 
-
             cout << "done." << endl;
-
         } else {
             // Calculate hash string per frame.
-            cout << "Resizing video... 0%" << endl;
+            cout << ":: resizing video..." << endl;
             VideoCapture capture;
             capture.open(input_filepath.string());
 
             VideoInfo info = get_info(capture);
+            auto fourcc = CV_FOURCC('a', 'v', 'c', '1');
+            VideoWriter writer(temp_filename.string(), fourcc, info.fps, size);
 
-            VideoWriter writer(temp_filename.string(), CV_FOURCC('H', '2', '6', '4'), info.fps, size);
+            ProgressBar progressBar(info.frame_count, 35);
 
-
-            int percent = 0;
-            int count = 0, total = info.frame_count;
             cv::Mat image;
             while (capture.read(image)) {
-                if (count / double(total) * 100 > percent) {
-                    percent++;
-                    std::cout << "Resizing video... " << percent << "%" << std::endl;
-                }
                 cv::resize(image, image, size);
                 writer.write(image);
                 image.release();
-                count++;
+
+                ++progressBar;
+                progressBar.display();
             }
 
             writer.release();
             capture.release();
+
+            progressBar.done();
+            cout << "[o] done." << endl;
         }
 
         rename(temp_filename, output_filepath);
@@ -125,17 +122,25 @@ void al::resize_video(path input_filepath, path output_filepath, Size size) {
 }
 
 bool al::get_frames(boost::filesystem::path file, FrameVector &frames) {
+    cout << ":: get frames from resized video file." << endl;
     FrameVector _frames;
     VideoCapture capture;
     capture.open(file.string());
-    
+
+    VideoInfo info = get_info(capture);
+    ProgressBar progressBar(info.frame_count, 35);
+
     cv::Mat image;
     while (capture.read(image)) {
         _frames.push_back(image);
+        ++progressBar;
+        progressBar.display();
     }
     capture.release();
     frames = _frames;
-    
+
+    progressBar.done();
+    cout << "[o] done." << endl;
     return true;
 }
 
@@ -155,7 +160,7 @@ void al::get_hash_strings(boost::filesystem::path filename, string type, int len
     VideoCapture capture;
     if (if_exists) {
         // Read video frames hash string from file.
-        std::cout << "Restore " << type << " value from file..." << std::endl;
+        std::cout << ":: restore " << type << " value from file..." << std::endl;
         
         std::ifstream input_file(hash_file.string());
         HashVector hashs;
@@ -168,36 +173,39 @@ void al::get_hash_strings(boost::filesystem::path filename, string type, int len
         input_file.close();
         
         hash_strings = hashs;
+        cout << "[o] done." << endl;
     } else {
-        // Calculate hash string per frame.
+        cout << ":: calculating " << type << " value..." << endl;
+
         VideoCapture capture;
         capture.open(filename.string());
         VideoInfo info = get_info(capture);
         HashVector hashs;
 
-        cout << "Calculating " << type << " value... 0%" << endl;
-        int percent = 0;
-        int count = 0, total = info.frame_count;
+        ProgressBar progressBar(info.frame_count, 35);
+
         cv::Mat image;
         while (capture.read(image)) {
-            if (count / double(total) * 100 > percent) {
-                percent++;
-                std::cout << "Calculating " << type << " value... " << percent << "%" << std::endl;
-            }
             string hash = al::pHash(image, length, dct_length);
             hashs.push_back(hash);
             image.release();
-            count++;
+
+            ++progressBar;
+            progressBar.display();
         }
         hash_strings = hashs;
-        
-        cout << "Save " << type << " value into file..." << endl;
+
+        progressBar.done();
+        cout << "[o] done." << endl;
+
+        cout << ":: save " << type << " value into file..." << endl;
         std::ofstream output_file(temp_filename.string());
         ostream_iterator<string> output_iterator(output_file, "\n");
         std::copy(hashs.begin(), hashs.end(), output_iterator);
         output_file.close();
 
         rename(temp_filename, hash_file);
+        cout << "[o] done." << endl;
     }
 }
 
@@ -216,7 +224,7 @@ void al::get_cuts(boost::filesystem::path resized_video_filepath, CutVector &cut
 
     auto if_exists = exists(cuts_filepath);
     if (if_exists) {
-        cout << "Restore cuts data from file..." << endl;
+        cout << ":: restore cuts data from file..." << endl;
 
         std::ifstream input_file(cuts_filepath.string());
 
@@ -226,11 +234,17 @@ void al::get_cuts(boost::filesystem::path resized_video_filepath, CutVector &cut
         }
 
         input_file.close();
+        cout << "[o] done." << endl;
     } else {
+        cout << ":: calculate cuts data..." << endl;
+
         Mat prevframe, nextframe, differframe;
         int i = 0;
 
         VideoCapture capture(resized_video_filepath.string());
+        VideoInfo info = get_info(capture);
+
+        ProgressBar progressBar(info.frame_count, 35);
 
         capture.read(prevframe);
         cvtColor(prevframe, prevframe, CV_RGB2GRAY);
@@ -258,7 +272,9 @@ void al::get_cuts(boost::filesystem::path resized_video_filepath, CutVector &cut
             }
 
             prevframe = nextframe;
-            i++;
+
+            ++progressBar;
+            progressBar.display();
         }
         capture.release();
 
@@ -271,6 +287,9 @@ void al::get_cuts(boost::filesystem::path resized_video_filepath, CutVector &cut
         output_file.close();
 
         rename(temp_filename, cuts_filepath);
+
+        progressBar.done();
+        cout << "[o] done." << endl;
     }
     cuts = _cuts;
 }

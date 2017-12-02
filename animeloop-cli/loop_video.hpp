@@ -43,6 +43,8 @@ namespace al {
         int phash_dct_length = 16;
         bool cover_enabled = false;
 
+        unsigned int threads = 1;
+
         // Data
         VideoInfo info;
         HashVector phash_strings;
@@ -82,6 +84,9 @@ namespace al {
          @param durations durations data
          */
         void generate(const al::LoopDurations filtered_durations);
+
+    private:
+        bool ffmpeg_available = false;
     };
 }
 

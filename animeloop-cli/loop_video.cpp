@@ -11,6 +11,7 @@
 #include "utils.hpp"
 #include "filter.hpp"
 #include "thread_pool.h"
+#include "progress_bar.hpp"
 
 #include <json/json.h>
 #include <sys/wait.h>
@@ -49,16 +50,17 @@ al::LoopVideo::LoopVideo(std::string input, std::string output_path) {
 }
 
 void al::LoopVideo::init() {
+    cout << ":: init" << endl;
     resize_video(this->input_filepath, this->resized_video_filepath, cv::Size(this->resize_length, this->resize_length));
     get_frames(this->resized_video_filepath, this->resized_frames);
     get_hash_strings(this->resized_video_filepath, "pHash", this->hash_length, this->phash_dct_length, this->phash_strings, this->phash_filepath);
     get_cuts(this->resized_video_filepath, this->cuts, this->cuts_filepath);
     this->info = get_info(this->resized_video_filepath.string());
-
-    filter::all_loops(this, this->durations);
 }
 
 void al::LoopVideo::filter() {
+    cout << ":: finding loops..." << endl;
+    filter::all_loops(this, this->durations);
     LoopDurations filtered_durations(this->durations);
 
     filter::cut_in_loop(this, filtered_durations);
@@ -68,18 +70,18 @@ void al::LoopVideo::filter() {
     filter::loop_same_color(this, filtered_durations);
 
     this->filtered_durations = filtered_durations;
+    cout << "[o] done." << endl;
+
 }
 
 void al::LoopVideo::print(LoopDurations durations) {
     VideoInfo info = get_info(this->input_filepath);
     
-    cout << "Total count: " << durations.size() << endl;
-    cout << "Loop parts of this video:" << endl;
+    cout << ":: total " << durations.size() << " loops:" << endl;
     for (auto duration : durations) {
         long start_frame, end_frame;
         tie(start_frame, end_frame) = duration;
-        cout << start_frame << " ~ " << end_frame << "  ";
-        cout << al::time_string(start_frame / info.fps) << " ~ " << al::time_string(end_frame / info.fps) << endl;
+        cout << "[o] " << al::time_string(start_frame / info.fps) << " ~ " << al::time_string(end_frame / info.fps) << endl;
     }
 }
 
@@ -105,13 +107,16 @@ void al::LoopVideo::generate(const LoopDurations durations) {
     source_json["filename"] = this->filename;
     videos_json["source"].append(source_json);
 
+
+    ThreadPool pool(threads);
+    vector<future<void>> futures;
+
+    ProgressBar progressBar1(durations.size(), 35);
+
+    cout << ":: saving loop video files..." << endl;
     /*
      * Multi-threads support for generating result video files.
      * */
-    unsigned int threads_num = std::thread::hardware_concurrency();
-    ThreadPool pool(threads_num);
-    vector<future<void>> futures;
-
     for_each(durations.begin(), durations.end(), [&](const LoopDuration duration) {
         long start_frame, end_frame;
         tie(start_frame, end_frame) = duration;
@@ -126,11 +131,12 @@ void al::LoopVideo::generate(const LoopDurations durations) {
         auto input_filename = this->input_filepath.string();
 
         if (!exists(video_filepath)) {
-            futures.push_back(pool.enqueue([=]() -> void {
+            futures.push_back(pool.enqueue([=, &progressBar1]() -> void {
                 VideoCapture capture;
                 capture.open(input_filename);
                 capture.set(CV_CAP_PROP_POS_FRAMES, start_frame);
-                cv::VideoWriter writer(video_filepath, CV_FOURCC('H', '2', '6', '4'), info.fps, info.size);
+                auto fourcc = CV_FOURCC('a', 'v', 'c', '1');
+                cv::VideoWriter writer(video_filepath, fourcc, info.fps, info.size);
 
                 cv::Mat image;
                 long frame = start_frame;
@@ -145,7 +151,13 @@ void al::LoopVideo::generate(const LoopDurations durations) {
                 }
                 writer.release();
                 capture.release();
+
+                ++progressBar1;
+                progressBar1.display();
             }));
+        } else {
+            ++progressBar1;
+            progressBar1.display();
         }
     });
 
@@ -156,6 +168,12 @@ void al::LoopVideo::generate(const LoopDurations durations) {
         f.get();
     });
 
+    progressBar1.done();
+    cout << "[o] done." << endl;
+
+    ProgressBar progressBar2(durations.size(), 35);
+
+    cout << ":: saving loop cover files..." << endl;
     /*
      * generate cover files and info json file.
      * */
@@ -192,6 +210,9 @@ void al::LoopVideo::generate(const LoopDurations durations) {
             }));
         }
 
+        ++progressBar2;
+        progressBar2.display();
+
         // Save video info json file.
         Json::Value video_json;
 
@@ -215,8 +236,14 @@ void al::LoopVideo::generate(const LoopDurations durations) {
         videos_json["loops"].append(video_json);
     });
 
+    progressBar2.done();
+    cout << "[o] done." << endl;
+
+    cout << ":: saving info json file..." << endl;
     string json_string = videos_json.toStyledString();
     std::ofstream out(path(this->loops_dirpath).append(this->filename + ".json").string());
     out << json_string;
     out.close();
+
+    cout << "[o] done." << endl;
 }
