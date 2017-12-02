@@ -44,34 +44,32 @@ brew install jsoncpp
 
 ``` Shell
 # OpenCV
-sudo apt-get -y install libopencv-dev build-essential cmake git libgtk2.0-dev pkg-config python-dev python-numpy libdc1394-22 libdc1394-22-dev libjpeg-dev libpng12-dev libjasper-dev libavcodec-dev libavformat-dev libswscale-dev libgstreamer0.10-dev libgstreamer-plugins-base0.10-dev libv4l-dev libtbb-dev libqt4-dev libfaac-dev libmp3lame-dev libopencore-amrnb-dev libopencore-amrwb-dev libtheora-dev libvorbis-dev libxvidcore-dev x264 v4l-utils unzip
+
+# compiler
+sudo apt-get install build-essential
+# required
+sudo apt-get install cmake git libgtk2.0-dev pkg-config libavcodec-dev libavformat-dev libswscale-dev
+# optional
+# sudo apt-get install python-dev python-numpy libtbb2 libtbb-dev libjpeg-dev libpng-dev libtiff-dev libjasper-dev libdc1394-22-dev
 
 mkdir opencv
 cd opencv
 
-wget https://github.com/Itseez/opencv/archive/3.2.0.zip -O opencv-3.2.0.zip
-unzip opencv-3.2.0.zip
-cd opencv-3.2.0
+wget https://github.com/opencv/opencv/archive/3.3.1.zip -O opencv-3.3.1.zip
+unzip opencv-3.3.1.zip
+cd opencv-3.3.1
 
 mkdir build
 cd build
-cmake -D CMAKE_BUILD_TYPE=RELEASE -D CMAKE_INSTALL_PREFIX=/usr/local -D WITH_TBB=ON -D WITH_V4L=ON -D WITH_QT=ON -D WITH_OPENGL=ON ..
+cmake -D CMAKE_BUILD_TYPE=RELEASE -D CMAKE_INSTALL_PREFIX=/usr/local ..
 
 make -j $(nproc)
-
-sudo /bin/bash -c 'echo "/usr/local/lib" > /etc/ld.so.conf.d/opencv.conf'
-sudo ldconfig
-
-## uninstall opencv
-sudo apt-get remove opencv
 
 # Boost
 sudo apt-get install libboost-all-dev
 
 # FFmpeg
-# unofficial ppa
-sudo add-apt-repository ppa:jonathonf/ffmpeg-3
-sudo apt update && sudo apt install ffmpeg
+sudo apt-get update && sudo apt-get install ffmpeg
 
 # Jsoncpp
 sudo apt-get install libjsoncpp-dev
@@ -111,7 +109,7 @@ make animeloop-cli
 ## Usage
 
 ```Shell
-Anime loop video generator.
+anime loop video generator.
 
 Usage:
   animeloop [OPTION...]
@@ -122,6 +120,8 @@ Usage:
   -o, --output arg        Output video directory path (default: .)
       --title arg         Title name of the source video (default:
                           <filename>)
+  -t, --thread arg        Program run in n threads. (default: <cpu core
+                          number>)
       --min-duration arg  Minimum duration (second) of loop video (default:
                           0.6)
       --max-duration arg  Maximum duration (second) of loop video (default:
@@ -130,5 +130,5 @@ Usage:
 
 
 # Example
-animeloop -i ~/your-video-file -o ~/Downloads/ --max-duration 4 --min-duration 1.0
+./animeloop-cli -i ~/your-video-file --max-duration 4 --min-duration 1.0 --cover -o ~/Downloads/
 ```
