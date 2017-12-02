@@ -12,9 +12,9 @@
 #include "filter.hpp"
 #include "thread_pool.h"
 #include "progress_bar.hpp"
+#include "child_process.hpp"
 
 #include <json/json.h>
-#include <sys/wait.h>
 
 using namespace std;
 using namespace boost::filesystem;
@@ -83,18 +83,6 @@ void al::LoopVideo::print(LoopDurations durations) {
         tie(start_frame, end_frame) = duration;
         cout << "[o] " << al::time_string(start_frame / info.fps) << " ~ " << al::time_string(end_frame / info.fps) << endl;
     }
-}
-
-int fork_gen_cover(string video_filepath, string cover_filepath) {
-    int pid = fork();
-    if(pid != 0) {
-        /* We're in the parent process, return the child's pid. */
-        return pid;
-    }
-    /* Otherwise, we're in the child process, so let's exec curl. */
-    execlp("ffmpeg", "ffmpeg", "-loglevel", "panic", "-i", video_filepath.c_str(), "-vframes", "1", "-f", "image2", cover_filepath.c_str(), NULL);
-
-    exit(100);
 }
 
 void al::LoopVideo::generate(const LoopDurations durations) {
@@ -191,22 +179,11 @@ void al::LoopVideo::generate(const LoopDurations durations) {
 
         if (cover_enabled && !exists(cover_filepath)) {
             futures.push_back(pool.enqueue([=]() -> void {
-                int cpid = fork_gen_cover(video_filepath, cover_filepath);
-                if(cpid == -1) {
-                    /* Failed to fork */
-                    cerr << "Fork failed" << endl;
-                    throw;
-                }
-
-                /* Optionally, wait for the child to exit and get
-                   the exit status. */
-                int status;
-                waitpid(cpid, &status, 0);
-                if(! WIFEXITED(status)) {
-                    cerr << "The child was killed or segfaulted or something." << endl;
-                }
-
-                status = WEXITSTATUS(status);
+                child_process([&]() {
+                    const char * i = video_filepath.c_str();
+                    const char * o = cover_filepath.c_str();
+                    execlp("ffmpeg", "ffmpeg", "-loglevel", "panic", "-i", i, "-vframes", "1", "-f", "image2", o, NULL);
+                });
             }));
         }
 

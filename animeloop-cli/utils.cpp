@@ -9,20 +9,18 @@
 #include "utils.hpp"
 #include "algorithm.hpp"
 #include "progress_bar.hpp"
+#include "child_process.hpp"
 
 #include <json/json.h>
 #include <boost/filesystem.hpp>
 #include <boost/date_time/posix_time/posix_time.hpp>
 #include <boost/regex.hpp>
 #include <numeric>
-#include <sys/wait.h>
-
 
 using namespace std;
 using namespace boost::filesystem;
 using namespace cv;
 using namespace al;
-
 
 VideoInfo al::get_info(VideoCapture &capture) {
     VideoInfo info;
@@ -41,19 +39,6 @@ VideoInfo al::get_info(boost::filesystem::path filename) {
     return get_info(capture);
 }
 
-
-int fork_resize_video(path input_filepath, path temp_filepath, Size size) {
-    int pid = fork();
-    if(pid != 0) {
-        /* We're in the parent process, return the child's pid. */
-        return pid;
-    }
-    /* Otherwise, we're in the child process, so let's exec curl. */
-    execlp("ffmpeg", "ffmpeg", "-loglevel", "panic", "-i", input_filepath.string().c_str(), "-s", (to_string(size.width) + "x" + to_string(size.height)).c_str(), "-an", temp_filepath.string().c_str(), NULL);
-
-    exit(100);
-}
-
 void al::resize_video(path input_filepath, path output_filepath, Size size) {
     path temp_output = path(output_filepath).parent_path().append("temp");
     path temp_filename = path(temp_output).append(output_filepath.filename().string());
@@ -66,27 +51,16 @@ void al::resize_video(path input_filepath, path output_filepath, Size size) {
     }
 
     auto if_exists = exists(output_filepath);
-
     if (!if_exists) {
         if (system("which ffmpeg1 &> /dev/null") == 0) {
             cout << ":: resizing video..." << endl;
-            int cpid = fork_resize_video(input_filepath, temp_filename, size);
-            if(cpid == -1) {
-                /* Failed to fork */
-                cerr << "Fork failed" << endl;
-                throw;
-            }
+            child_process([&]() {
+                const char * i = input_filepath.string().c_str();
+                const char * s = (to_string(size.width) + "x" + to_string(size.height)).c_str();
+                const char * o = temp_filename.string().c_str();
 
-            /* Optionally, wait for the child to exit and get
-               the exit status. */
-            int status;
-            waitpid(cpid, &status, 0);
-            if(! WIFEXITED(status)) {
-                cerr << "The child was killed or segfaulted or something\n" << endl;
-            }
-
-            status = WEXITSTATUS(status);
-
+                execlp("ffmpeg", "ffmpeg", "-loglevel", "panic", "-i", i, "-s", s, "-an", o, NULL);
+            });
             cout << "done." << endl;
         } else {
             // Calculate hash string per frame.
