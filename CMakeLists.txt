@@ -9,7 +9,10 @@ include_directories(${PROJECT_SOURCE_DIR}/cxxopts/include)
 include_directories(${PROJECT_SOURCE_DIR}/research)
 
 set(CMAKE_CXX_STANDARD 11)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread")
+
+IF (CMAKE_SYSTEM_NAME MATCHES "Linux")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread")
+ENDIF(CMAKE_SYSTEM_NAME MATCHES "Linux")
 
 set(CLI_SOURCE_FILES
     animeloop-cli/algorithm.cpp
@@ -65,7 +68,6 @@ target_link_libraries( cuts-switch ${OpenCV_LIBS})
 target_link_libraries( color ${OpenCV_LIBS})
 
 # Boost
-SET(Boost_USE_STATIC_LIBS ON)
 find_package(Boost COMPONENTS filesystem date_time REQUIRED)
 target_link_libraries( animeloop-cli ${Boost_LIBRARIES} )
 target_link_libraries( cuts-switch ${Boost_LIBRARIES} )
