@@ -222,6 +222,7 @@ void al::get_cuts(boost::filesystem::path resized_video_filepath, CutVector &cut
 
         capture.read(prevframe);
         cvtColor(prevframe, prevframe, CV_RGB2GRAY);
+        ++progressBar;
 
         while (capture.read(nextframe)) {
             cvtColor(nextframe, nextframe, CV_RGB2GRAY);
