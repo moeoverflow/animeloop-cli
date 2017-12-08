@@ -62,8 +62,9 @@ void al::filter::all_loops(al::LoopVideo *loop, al::LoopDurations &durations) {
  @param loop LoopVideo instance
  @param durations reference of durations value
  */
-void al::filter::cut_in_loop(al::LoopVideo * loop, LoopDurations &durations)
-{
+void al::filter::cut_in_loop(al::LoopVideo * loop, LoopDurations &durations) {
+    if (durations.size() == 0) return;
+
     LoopDurations _durations;
 
     for (auto duration : durations) {
@@ -94,6 +95,8 @@ void al::filter::cut_in_loop(al::LoopVideo * loop, LoopDurations &durations)
  @param durations reference of durations value
  */
 void al::filter::loop_nearby(al::LoopVideo *loop, al::LoopDurations &durations) {
+    if (durations.size() == 0) return;
+
     LoopDurations _durations;
     auto hashs = loop->phash_strings;
 
@@ -122,13 +125,15 @@ void al::filter::loop_nearby(al::LoopVideo *loop, al::LoopDurations &durations) 
  @param durations reference of durations value
  */
 void al::filter::loop_tiny_frame_change(al::LoopVideo * loop, al::LoopDurations &durations) {
+    if (durations.size() == 0) return;
+
     LoopDurations _durations;
     auto hashs = loop->phash_strings;
     
     for (auto it = durations.begin(); it != durations.end()-1; ++it) {
         long begin_frame, end_frame;
         tie(begin_frame, end_frame) = *it;
-        
+
         std::vector<int> distances;
         for (long i = begin_frame; i < end_frame-1; ++i) {
             int distance = hamming_distance(hashs[i], hashs[i+1]);
@@ -153,6 +158,8 @@ void al::filter::loop_tiny_frame_change(al::LoopVideo * loop, al::LoopDurations 
  @param durations reference of durations value
  */
 void al::filter::loop_white_or_black(al::LoopVideo *loop, al::LoopDurations &durations) {
+    if (durations.size() == 0) return;
+
     LoopDurations _durations;
 
     VideoCapture capture;
@@ -196,6 +203,8 @@ void al::filter::loop_white_or_black(al::LoopVideo *loop, al::LoopDurations &dur
  @param durations reference of durations value
  */
 void al::filter::loop_same_color(al::LoopVideo * loop, al::LoopDurations &durations) {
+    if (durations.size() == 0) return;
+
     LoopDurations _durations;
 
     for (auto duration : durations) {

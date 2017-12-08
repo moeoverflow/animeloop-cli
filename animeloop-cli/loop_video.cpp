@@ -99,8 +99,8 @@ void al::LoopVideo::generate(const LoopDurations durations) {
     ThreadPool pool(threads);
     vector<future<void>> futures;
 
-    ProgressBar progressBar1(durations.size(), 35);
-
+    ProgressBar progressBar1(durations.size()+1, 35);
+    ++progressBar1;
     cout << ":: saving loop video files..." << endl;
     /*
      * Multi-threads support for generating result video files.
@@ -159,7 +159,8 @@ void al::LoopVideo::generate(const LoopDurations durations) {
     progressBar1.done();
     cout << "[o] done." << endl;
 
-    ProgressBar progressBar2(durations.size(), 35);
+    ProgressBar progressBar2(durations.size()+1, 35);
+    ++progressBar2;
 
     cout << ":: saving loop cover files..." << endl;
     /*
