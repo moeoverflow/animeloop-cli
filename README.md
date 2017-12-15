@@ -1,5 +1,5 @@
 # animeloop-cli
-Anime loop video command line tool.
+Animeloop command line tool. The goal of this project is to find and cut out the looping fragments automatically in Japanese anime. For details, please see my [technical report(English)](https://animeloop.org/paper/technical_report_en.pdf), [technical report(Chinese)](https://animeloop.org/paper/technical_report_zh.pdf).
 
 ## Installation
 
@@ -8,8 +8,6 @@ Anime loop video command line tool.
 ``` Shell
 yaourt -S animeloop-cli
 ```
-
-
 
 ### Install manually
 
@@ -68,8 +66,11 @@ make -j $(nproc)
 # Boost
 sudo apt-get install libboost-all-dev
 
-# FFmpeg
-sudo apt-get update && sudo apt-get install ffmpeg
+# FFmpeg !!!! ffmpeg version 3.x required !!!!
+sudo add-apt-repository ppa:jonathonf/ffmpeg-3
+sudo apt update && sudo apt install ffmpeg libav-tools x264 x265
+## downgrade FFmpeg
+sudo apt install ppa-purge && sudo ppa-purge ppa:jonathonf/ffmpeg-3
 
 # Jsoncpp
 sudo apt-get install libjsoncpp-dev
@@ -132,3 +133,6 @@ Usage:
 # Example
 ./animeloop-cli -i ~/your-video-file --max-duration 4 --min-duration 1.0 --cover -o ~/Downloads/
 ```
+## License
+
+This project is available under the MIT License. See the LICENSE file for more info.
