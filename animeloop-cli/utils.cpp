@@ -52,7 +52,7 @@ void al::resize_video(path input_filepath, path output_filepath, Size size) {
 
     auto if_exists = exists(output_filepath);
     if (!if_exists) {
-        if (system("which ffmpeg1 &> /dev/null") == 0) {
+        if (system("which ffmpeg &> /dev/null") == 0) {
             cout << ":: resizing video..." << endl;
             child_process([&]() {
                 const char * i = input_filepath.string().c_str();

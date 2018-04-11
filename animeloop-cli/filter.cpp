@@ -28,6 +28,8 @@ void al::filter::all_loops(al::LoopVideo *loop, al::LoopDurations &durations) {
     int min_duration_frame = loop->min_duration * loop->info.fps;
     int max_duration_frame = loop->max_duration * loop->info.fps;
     auto hashs = loop->phash_strings;
+
+    if (hashs.size() == 0) return;
     
     for (auto it = hashs.begin(); it != (hashs.end() - min_duration_frame); ++it) {
         long begin = distance(hashs.begin(), it);

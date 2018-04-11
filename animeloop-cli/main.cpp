@@ -65,7 +65,7 @@ int main(int argc, char * argv[]) {
             }
 
             if (threads == 0) {
-                threads = thread::hardware_concurrency();
+                threads = 1;
             }
 
             al::LoopVideo loop_video(input, output);
