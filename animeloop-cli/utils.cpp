@@ -52,15 +52,14 @@ void al::resize_video(path input_filepath, path output_filepath, Size size) {
 
     auto if_exists = exists(output_filepath);
     if (!if_exists) {
-        if (system("which ffmpeg &> /dev/null") == 0) {
+        if (system("where /q ffmpeg") == 0) {
             cout << ":: resizing video..." << endl;
-            child_process([&]() {
-                const char * i = input_filepath.string().c_str();
-                const char * s = (to_string(size.width) + "x" + to_string(size.height)).c_str();
-                const char * o = temp_filename.string().c_str();
+			const string i = input_filepath.string();
+			const string s = (to_string(size.width) + "x" + to_string(size.height));
+			const string o = temp_filename.string();
 
-                execlp("ffmpeg", "ffmpeg", "-loglevel", "panic", "-i", i, "-s", s, "-an", o, NULL);
-            });
+			const string cli = "ffmpeg -loglevel panic -stats -i \"" + i + "\" -s " + s + " -an \"" + o + "\"";
+            child_process(cli);
             cout << "done." << endl;
         } else {
             // Calculate hash string per frame.

@@ -54,7 +54,7 @@ int main(int argc, char * argv[]) {
             cout << "Animeloop (´・ω・`)" << endl;
             cout << endl;
             cout << ":: detecting external program..." << endl;
-            if (system("which ffmpeg &> /dev/null") == 0) {
+			if (system("where /q ffmpeg") == 0) {
                 cout << "[o] detected ffmpeg." << endl;
             } else {
                 cout << "[x] not detect ffmpeg." << endl;
