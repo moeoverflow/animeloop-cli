@@ -6,8 +6,6 @@
 #define ANIMELOOP_CLI_CHILD_PROCESS_H
 
 #include <string>
-#include <iostream>
-#include <windows.h>
 
 void child_process(std::string cli);
 
