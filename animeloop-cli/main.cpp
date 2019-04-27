@@ -61,7 +61,7 @@ int main(int argc, char * argv[]) {
             string find_ffmpeg_command = "which ffmpeg &> /dev/null";
             #endif
 
-			if (system(find_ffmpeg_command.c_str()) == 0) {
+            if (system(find_ffmpeg_command.c_str()) == 0) {
                 cout << "[o] detected ffmpeg." << endl;
             } else {
                 cout << "[x] not detect ffmpeg." << endl;

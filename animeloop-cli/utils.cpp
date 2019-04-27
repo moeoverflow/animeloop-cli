@@ -54,11 +54,11 @@ void al::resize_video(path input_filepath, path output_filepath, Size size) {
     if (!if_exists) {
         if (system("where /q ffmpeg") == 0) {
             cout << ":: resizing video..." << endl;
-			const string i = input_filepath.string();
-			const string s = (to_string(size.width) + "x" + to_string(size.height));
-			const string o = temp_filename.string();
+            const string i = input_filepath.string();
+            const string s = (to_string(size.width) + "x" + to_string(size.height));
+            const string o = temp_filename.string();
 
-			const string cli = "ffmpeg -loglevel panic -stats -i \"" + i + "\" -s " + s + " -an \"" + o + "\"";
+            const string cli = "ffmpeg -loglevel panic -stats -i \"" + i + "\" -s " + s + " -an \"" + o + "\"";
             child_process(cli);
             cout << "done." << endl;
         } else {
