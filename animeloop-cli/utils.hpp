@@ -57,4 +57,6 @@ namespace al {
     std::string time_string(double seconds);
 }
 
+bool detect_ffmpeg();
+
 #endif /* utils_hpp */

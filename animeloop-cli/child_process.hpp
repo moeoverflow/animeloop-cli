@@ -5,8 +5,8 @@
 #ifndef ANIMELOOP_CLI_CHILD_PROCESS_H
 #define ANIMELOOP_CLI_CHILD_PROCESS_H
 
-#include <functional>
+#include <string>
 
-void child_process(std::function<void()> functor);
+void child_process(std::string cli);
 
 #endif //ANIMELOOP_CLI_CHILD_PROCESS_H

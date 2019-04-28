@@ -13,6 +13,7 @@
 
 #include "cxxopts.hpp"
 #include "loop_video.hpp"
+#include "utils.hpp"
 
 using namespace std;
 using namespace boost::filesystem;
@@ -54,7 +55,8 @@ int main(int argc, char * argv[]) {
             cout << "Animeloop (´・ω・`)" << endl;
             cout << endl;
             cout << ":: detecting external program..." << endl;
-            if (system("which ffmpeg &> /dev/null") == 0) {
+
+            if (detect_ffmpeg()) {
                 cout << "[o] detected ffmpeg." << endl;
             } else {
                 cout << "[x] not detect ffmpeg." << endl;

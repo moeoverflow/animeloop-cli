@@ -52,15 +52,14 @@ void al::resize_video(path input_filepath, path output_filepath, Size size) {
 
     auto if_exists = exists(output_filepath);
     if (!if_exists) {
-        if (system("which ffmpeg &> /dev/null") == 0) {
+        if (detect_ffmpeg()) {
             cout << ":: resizing video..." << endl;
-            child_process([&]() {
-                const char * i = input_filepath.string().c_str();
-                const char * s = (to_string(size.width) + "x" + to_string(size.height)).c_str();
-                const char * o = temp_filename.string().c_str();
+            const string i = input_filepath.string();
+            const string s = (to_string(size.width) + "x" + to_string(size.height));
+            const string o = temp_filename.string();
 
-                execlp("ffmpeg", "ffmpeg", "-loglevel", "panic", "-i", i, "-s", s, "-an", o, NULL);
-            });
+            const string cli = "ffmpeg -loglevel panic -stats -i \"" + i + "\" -s " + s + " -an \"" + o + "\"";
+            child_process(cli);
             cout << "done." << endl;
         } else {
             // Calculate hash string per frame.
@@ -309,4 +308,14 @@ std::string al::time_string(double seconds) {
     auto ms = boost::posix_time::milliseconds(seconds * 1000);
     auto time = boost::posix_time::time_duration(ms);
     return boost::posix_time::to_simple_string(time);
+}
+
+bool detect_ffmpeg() {
+    #ifdef _WIN32
+    string find_ffmpeg_command = "where /q ffmpeg";
+    #else
+    string find_ffmpeg_command = "which ffmpeg &> /dev/null";
+    #endif
+
+    return system(find_ffmpeg_command.c_str()) == 0;
 }

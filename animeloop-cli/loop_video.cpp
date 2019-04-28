@@ -180,11 +180,10 @@ void al::LoopVideo::generate(const LoopDurations durations) {
 
         if (cover_enabled && !exists(cover_filepath)) {
             futures.push_back(pool.enqueue([=]() -> void {
-                child_process([&]() {
-                    const char * i = video_filepath.c_str();
-                    const char * o = cover_filepath.c_str();
-                    execlp("ffmpeg", "ffmpeg", "-loglevel", "panic", "-i", i, "-vframes", "1", "-f", "image2", o, NULL);
-                });
+                const string i = video_filepath;
+                const string o = cover_filepath;
+                const string cli = "ffmpeg -loglevel panic -i \"" + i + "\" -vframes 1 -f image2 \"" + o + "\"";
+                child_process(cli);
             }));
         }
 
