@@ -96,14 +96,14 @@ pacman -S jsoncpp
 
 ```shell
 # - MinGW build require tool MSYS2, you sould download and install it first, then use pacman in MSYS2 Enviroment
+#
 # - Assume you're building to mingw64, if you'd like to build to mingw32, replace `mingw-w64-x86_64` with `mingw-w64-i686`
 #
 # - Some packages are updated and not compatible, so some of the steps are using `pacman -U` to install specific version
 #   packages with USTC Mirrors, you can change `https://mirrors.ustc.edu.cn/msys2/mingw/x86_64/` to other sources.
 
 # Build deps
-pacman -S libintl mingw-w64-x86_64-gcc mingw-w64-x86_64-cmake
-pacman -S make
+pacman -S libintl mingw-w64-x86_64-gcc mingw-w64-x86_64-cmake mingw-w64-x86_64-make
 
 # Boost
 # - It seems that when using Boost 1.66+ will cause build fail
@@ -115,7 +115,7 @@ pacman -S mingw-w64-x86_64-hdf5
 
 # Jsoncpp
 # - JSONCPP comes with cmake, so if you've install cmake manually, you're not needed to install JSONCPP again
-pacman -S mingw-w64-x86_64-jsoncpp
+pacman -S mingw-w64-x86_64-jsoncpp jsoncpp-devel
 
 # FFmpeg
 # - Some dll files are missing in MSYS2 MinGW64 FFmpeg package, so you should download it from other builds
@@ -149,7 +149,7 @@ unzip -p ffmpeg-3.4.2-win64-static.zip ffmpeg-3.4.2-win64-static/bin/ffmpeg.exe 
 
 > You should grab a FFmpeg 3.x binary from https://ffmpeg.zeranoe.com/ to make it works.
 
-> You should download OpenH264 1.7.0 library file from https://github.com/cisco/openh264/releases manually.
+> You should download OpenH264 1.7.0+ library file from https://github.com/cisco/openh264/releases manually.
 
 > If you want to use it on Windows, always use backslash to set file path like `D:\path\to\video.mp4`, even under MSYS2 or Cygwin, or boost cannot find the specific path.
 
