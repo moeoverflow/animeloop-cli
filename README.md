@@ -11,6 +11,21 @@ Animeloop command line tool. The goal of this project is to automatically find a
 yaourt -S animeloop-cli
 ```
 
+### Docker
+
+```Shell
+docker build -t animeloop-cli .
+
+# You should change these path: /path/to/input/file.mp4 and /path/to/ouput
+docker run \
+-v /path/to/input/file.mp4:/data/file.mp4 \
+-v /path/to/ouput:/loops \
+--rm \
+animeloop-cli \
+-i /data/file.mp4 \
+-o /loops
+```
+
 ### Install manually
 
 #### Modules Init
@@ -128,19 +143,19 @@ unzip -p ffmpeg-3.4.2-win64-static.zip ffmpeg-3.4.2-win64-static/bin/ffmpeg.exe 
 ##### Windows via Microsoft Visual Studio
 
 - Download and install [Microsoft Visual Studio](https://visualstudio.microsoft.com/)
-    
+  
 > Will uses Visual Studio 2015 Enterprise (VC14) as example for below.
-    
+
 - Download [CMake-GUI](https://cmake.org/download/)
 
 - Download [Boost prebuilt library](https://sourceforge.net/projects/boost/files/boost-binaries/) for VC14
 	
 > You may need a older version (< 1.66.0) in case of some unknown bug.
-	
+
 - Download [OpenCV prebuilt library](https://opencv.org/releases/) for Windows
 	
 > OpenCV should be 3.2+ but not 4.x
-	
+
 - Download [HDF5 prebuilt library](https://www.hdfgroup.org/downloads/hdf5) for VC14
 	> You may need an account to download the file, you can register for free or build your own.
 	> If you don't want to install the msi package, run `msiexec /a drive:\path\to\file.msi /qb TARGETDIR=drive:\path\to\extract`
