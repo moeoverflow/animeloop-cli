@@ -1,7 +1,9 @@
 # animeloop-cli
-![Animeloop Logo](https://animeloop.org/files/animeloop.gif)
+![Animeloop Logo](https://s3.moeoverflow.com/animeloop-production/static/animeloop.gif)
 
-Animeloop command line tool. The goal of this project is to automatically find and cut out the looping fragments in Japanese anime. For details, please see my [technical report(English)](https://animeloop.org/files/paper/technical_report_en.pdf), [technical report(Chinese)](https://animeloop.org/files/paper/technical_report_zh.pdf).
+Animeloop command line tool. The goal of this project is to automatically find and cut out the looping fragments in Japanese anime. 
+
+For details, please see my [technical report(English)](https://s3.moeoverflow.com/animeloop-production/static/technical_report_en.pdf), [technical report(Chinese)](https://s3.moeoverflow.com/animeloop-production/static/technical_report_zh.pdf). ([technical_report_output_example](https://s3.moeoverflow.com/animeloop-production/static/technical_report_output_example.zip)) ([technical_report_resources](https://s3.moeoverflow.com/animeloop-production/static/technical_report_resources.zip))
 
 ## Installation
 
